@@ -45,4 +45,28 @@ class ListTest extends org.specs2.mutable.Specification {
       List.drop(Cons(1, Cons(2, Cons(3, Cons(4, Nil)))), 3) must beEqualTo(Cons(4, Nil))
     }
   }
+
+  "dropWhile of an empty list" should {
+    "not change the original list" in {
+      List.dropWhile(Nil, (x: Int) => x < 5) must beEqualTo(Nil)
+    }
+  }
+
+  "dropWhile" should {
+    "not change the original list if the predicate is false for all elements" in {
+      List.dropWhile(Cons(1, Cons(2, Nil)), (x: Int) => x > 3) must beEqualTo(Cons(1, Cons(2, Nil)))
+    }
+  }
+
+  "dropWhile" should {
+    "empty a list if the predicate is true for all of its elements" in {
+      List.dropWhile(Cons(1, Cons(2, Nil)), (x: Int) => x < 3) must beEqualTo(Nil)
+    }
+  }
+
+  "dropWhile" should {
+    "take elements from the head of the list until the predicate is false for one of them or the list is empty" in {
+      List.dropWhile(Cons(1, Cons(2, Cons(3, Cons(4, Cons(2, Nil))))), (x: Int) => x < 3) must beEqualTo(Cons(3,Cons(4, Cons(2, Nil))))
+    }
+  }
 }
