@@ -76,13 +76,9 @@ object List {
   }
 
   @tailrec
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = {
-    l match {
-      case Nil => l
-      case Cons(h, t) =>
-        if (!f(h)) l
-        else dropWhile(t, f)
-    }
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = l match {
+    case Cons(h, t) if f(h) => dropWhile(t, f)
+    case _ => l
   }
 
   def init[A](l: List[A]): List[A] = {
