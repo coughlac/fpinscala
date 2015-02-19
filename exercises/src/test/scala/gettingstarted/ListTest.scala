@@ -96,15 +96,21 @@ class ListTest extends org.specs2.mutable.Specification {
     }
   }
 
-  "fold right" should {
-    "should explode" in {
-      List.foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_)) must beEqualTo(Cons(1,Cons(2,Cons(3, Nil))))
+  "fold right with a function that d" should {
+    "should return a Cons list with the same elements" in {
+      List.foldRight(List(1, 2, 3), Nil: List[Int])(Cons(_, _)) must beEqualTo(Cons(1, Cons(2, Cons(3, Nil))))
     }
   }
 
   "length" should {
     "should count the elements in the list" in {
-      List.length(List(1,2,3,4)) must beEqualTo(4)
+      List.length(List(1, 2, 3, 4)) must beEqualTo(4)
+    }
+  }
+
+  "fold left with a function that adds the elements" should {
+    "should return a sum total of 6" in {
+      List.foldLeft(List(1, 2, 3), 0)((acc, xs) => acc + xs) must beEqualTo(6)
     }
   }
 }
