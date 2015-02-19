@@ -107,5 +107,4 @@ class ListTest extends org.specs2.mutable.Specification {
       List.length(List(1,2,3,4)) must beEqualTo(4)
     }
   }
-
 }
