@@ -65,14 +65,9 @@ object List {
   }
 
   @tailrec
-  def drop[A](l: List[A], n: Int): List[A] = {
-    if (n == 0) l
-    else {
-      l match {
-        case Nil => Nil
-        case Cons(h, t) => drop(t, n - 1)
-      }
-    }
+  def drop[A](l: List[A], n: Int): List[A] = l match {
+      case Cons(h, t) if n > 0 => drop(t, n - 1)
+      case _ => l
   }
 
   @tailrec
