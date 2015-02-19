@@ -88,4 +88,24 @@ class ListTest extends org.specs2.mutable.Specification {
       List.init(Cons(1, Cons(2, Cons(3, Cons(4, Cons(2, Nil)))))) must beEqualTo(Cons(1, Cons(2, Cons(3, Cons(4, Nil)))))
     }
   }
+
+  "product" should {
+    "should short circuit if a 0.0 is encountered" in {
+      List.product(Cons(3, Cons(2, Cons(0, Cons(4, Cons(2, Nil)))))) must beEqualTo(0)
+      List.product(Cons(3, Cons(2, Cons(5, Cons(2, Nil))))) must beEqualTo(60)
+    }
+  }
+
+  "fold right" should {
+    "should explode" in {
+      List.foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_)) must beEqualTo(Cons(1,Cons(2,Cons(3, Nil))))
+    }
+  }
+
+  "length" should {
+    "should count the elements in the list" in {
+      List.length(List(1,2,3,4)) must beEqualTo(4)
+    }
+  }
+
 }

@@ -66,8 +66,8 @@ object List {
 
   @tailrec
   def drop[A](l: List[A], n: Int): List[A] = l match {
-      case Cons(h, t) if n > 0 => drop(t, n - 1)
-      case _ => l
+    case Cons(h, t) if n > 0 => drop(t, n - 1)
+    case _ => l
   }
 
   @tailrec
@@ -93,7 +93,9 @@ object List {
     }
   }
 
-  def length[A](l: List[A]): Int = sys.error("todo")
+  def length[A](l: List[A]): Int = {
+    foldRight(l, 0)((_, y) => 1 + y)
+  }
 
   def foldLeft[A, B](l: List[A], z: B)(f: (B, A) => B): B = sys.error("todo")
 
