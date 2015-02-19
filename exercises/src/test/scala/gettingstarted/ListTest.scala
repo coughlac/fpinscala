@@ -113,4 +113,10 @@ class ListTest extends org.specs2.mutable.Specification {
       List.foldLeft(List(1, 2, 3), 0)((acc, xs) => acc + xs) must beEqualTo(6)
     }
   }
+
+  "sum" should {
+    "should return a sum total of the elements of the list" in {
+      List.sum(List(1, 2, 3)) must beEqualTo(6)
+    }
+  }
 }
