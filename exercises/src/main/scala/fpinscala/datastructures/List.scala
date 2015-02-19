@@ -85,7 +85,22 @@ object List {
     }
   }
 
-  def init[A](l: List[A]): List[A] = sys.error("todo")
+  def init[A](l: List[A]): List[A] = {
+    val list: List[A] = l match {
+      case Nil => l
+      case _ => reverseWithFilter(l, Nil, (x: List[A]) => x != Nil)
+    }
+    reverseWithFilter(list, Nil, (x: List[A]) => true)
+  }
+
+  @tailrec
+  def reverseWithFilter[A](l: List[A], copy: List[A], f: List[A] => Boolean): List[A] = {
+    l match {
+      case Cons(h, t) if f(t) =>
+        reverseWithFilter(t, append(Cons(h, Nil), copy), f)
+      case _ => copy
+    }
+  }
 
   def length[A](l: List[A]): Int = sys.error("todo")
 
