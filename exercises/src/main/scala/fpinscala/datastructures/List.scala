@@ -30,7 +30,9 @@ object List {
     case _ => 101
   }
 
-  def append[A](a1: List[A], a2: List[A]): List[A] = foldLeft(reverse(a1), a2)((acc, e)=> Cons(e, acc))
+  def append[A](a1: List[A], a2: List[A]): List[A] = foldRight(a1, a2)((e, acc) => Cons(e, acc))
+
+  //foldLeft(reverse(a1), a2)((acc, e)=> Cons(e, acc))
 
 
   def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B = // Utility functions
