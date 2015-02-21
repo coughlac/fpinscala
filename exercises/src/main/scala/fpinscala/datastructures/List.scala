@@ -80,7 +80,7 @@ object List {
   def reverseWithFilter[A](l: List[A], copy: List[A], f: List[A] => Boolean): List[A] = {
     l match {
       case Cons(h, t) if f(t) =>
-        reverseWithFilter(t, append(Cons(h, Nil), copy), f)
+        reverseWithFilter(t, Cons(h,copy), f)
       case _ => copy
     }
   }
