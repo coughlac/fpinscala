@@ -99,6 +99,6 @@ object List {
 
   def reverse[A](l: List[A]): List[A] = {
     val copy: List[A] = Nil
-    foldLeft(l, copy)((copy, h: A) => append( Cons(h, Nil), copy))
+    foldLeft(l, copy)((copy, h: A) => Cons(h, copy))
   }
 }
