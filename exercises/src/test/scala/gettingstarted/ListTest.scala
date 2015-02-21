@@ -119,4 +119,10 @@ class ListTest extends org.specs2.mutable.Specification {
       List.sum(List(1, 2, 3)) must beEqualTo(6)
     }
   }
+
+  "reverse" should {
+    "should return the list with all the elements in reverse order" in {
+    List.reverse(List(1, 2, 3)) must beEqualTo(List(3,2,1))
+  }
+}
 }

@@ -96,4 +96,9 @@ object List {
   }
 
   def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
+
+  def reverse[A](l: List[A]): List[A] = {
+    val copy: List[A] = Nil
+    foldLeft(l, copy)((copy, h: A) => append( Cons(h, Nil), copy))
+  }
 }
