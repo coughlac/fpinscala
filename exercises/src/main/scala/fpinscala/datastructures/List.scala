@@ -102,10 +102,10 @@ object List {
     }
   }
 
-  def foldRight2[A, B](as: List[A], z: B)(f: (A, B) => B): B = // Utility functions
+  def foldRight2[A, B](as: List[A], z: B)(f: (A, B) => B): B =
     as match {
       case Nil => z
-      case Cons(x, xs) => f(x, foldRight(xs, z)(f))
+      case Cons(h, t) => f(h, foldRight(t, z)(f))
     }
 
   def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
