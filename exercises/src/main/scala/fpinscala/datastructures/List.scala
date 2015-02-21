@@ -97,15 +97,17 @@ object List {
 
   def foldLeft2[A, B](l: List[A], z: B)(f: (B, A) => B): B = {
     l match {
-      case Nil => z
-      case Cons(h, t) => f(foldRight(t, z)((h, z) => f(z, h)), h)
+      case Cons(h, t) => foldRight(l, z)((h, z) => f(z, h))
     }
+    // l match {
+    //   case Cons(h, t) => f(foldRight(t, z)((h, z) => f(z, h)), h)
+    // }
   }
 
   def foldRight2[A, B](as: List[A], z: B)(f: (A, B) => B): B =
     as match {
-      case Nil => z
-      case Cons(h, t) => f(h, foldRight(t, z)(f))
+      case Cons(h, t) => foldLeft(reverse(as), z)((z, h) => f(h, z))
+      //f(h, foldLeft(t, z)((z, h) => f(h, z)))
     }
 
   def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
