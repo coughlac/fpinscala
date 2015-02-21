@@ -122,7 +122,14 @@ class ListTest extends org.specs2.mutable.Specification {
 
   "reverse" should {
     "should return the list with all the elements in reverse order" in {
-    List.reverse(List(1, 2, 3)) must beEqualTo(List(3,2,1))
+      List.reverse(List(1, 2, 3)) must beEqualTo(List(3, 2, 1))
+    }
   }
-}
+
+  "fold left (implemented using foldRight) with a function that adds the elements" should {
+    "should return a sum total of 6" in {
+      val left: Int = List.foldLeft2(List(1, 2, 3), 0)((acc, xs) => acc + xs)
+      left must beEqualTo(6)
+    }
+  }
 }

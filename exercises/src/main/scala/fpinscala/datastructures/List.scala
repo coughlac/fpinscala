@@ -80,7 +80,7 @@ object List {
   def reverseWithFilter[A](l: List[A], copy: List[A], f: List[A] => Boolean): List[A] = {
     l match {
       case Cons(h, t) if f(t) =>
-        reverseWithFilter(t, Cons(h,copy), f)
+        reverseWithFilter(t, Cons(h, copy), f)
       case _ => copy
     }
   }
@@ -94,6 +94,19 @@ object List {
       case Cons(h, t) => foldLeft(t, f(z, h))(f)
     }
   }
+
+  def foldLeft2[A, B](l: List[A], z: B)(f: (B, A) => B): B = {
+    l match {
+      case Nil => z
+      case Cons(h, t) => f(foldRight(t, z)((h, z) => f(z, h)), h)
+    }
+  }
+
+  def foldRight2[A, B](as: List[A], z: B)(f: (A, B) => B): B = // Utility functions
+    as match {
+      case Nil => z
+      case Cons(x, xs) => f(x, foldRight(xs, z)(f))
+    }
 
   def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 
