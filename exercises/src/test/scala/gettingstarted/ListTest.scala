@@ -134,19 +134,24 @@ class ListTest extends org.specs2.mutable.Specification {
 
   "fold left (implemented using foldRight) with a function that " should {
     "should return a Cons list with the same elements" in {
-      List.foldLeft2(List(1, 2, 3), 0)( _ + _) must beEqualTo(List.foldLeft(List(1, 2, 3), 0)( _ + _))
+      List.foldLeft2(List(1, 2, 3), 0)(_ + _) must beEqualTo(List.foldLeft(List(1, 2, 3), 0)(_ + _))
     }
   }
 
   "fold right (implemented using foldLeft) with a function that d" should {
     "should return a Cons list with the same elements" in {
-      List.foldRight2(List(1, 2, 3), Nil: List[Int])(Cons(_,_)) must beEqualTo (List.foldRight(List(1, 2, 3),Nil: List[Int])(Cons(_,_)))
+      List.foldRight2(List(1, 2, 3), Nil: List[Int])(Cons(_, _)) must beEqualTo(List.foldRight(List(1, 2, 3), Nil: List[Int])(Cons(_, _)))
     }
   }
 
   "fold right (implemented using foldLeft) with a function that adds the elements" should {
     "should return a sum total of 6" in {
       List.foldRight2(List(1, 2, 3), 0)((acc, xs) => acc + xs) must beEqualTo(List.foldRight(List(1, 2, 3), 0)((acc, xs) => acc + xs))
+    }
+  }
+  "append (implemented with foldLeft)" should {
+    "insert list 2 after list 1 elements" in {
+      List.append(List(1, 2, 3), List(4, 5, 6)) must beEqualTo(List(1, 2, 3, 4, 5, 6))
     }
   }
 }
