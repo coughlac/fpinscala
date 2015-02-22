@@ -115,4 +115,11 @@ object List {
     val copy: List[A] = Nil
     foldLeft(l, copy)((copy, h: A) => Cons(h, copy))
   }
+
+  def flatMap2[A](l: List[List[A]]): List[A] = {
+    val copy: List[A] = Nil
+    l match {
+      case Cons(h, t) => foldRight2(l, copy)((h, copy) => append(h, copy))
+    }
+  }
 }

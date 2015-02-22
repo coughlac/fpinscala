@@ -149,9 +149,16 @@ class ListTest extends org.specs2.mutable.Specification {
       List.foldRight2(List(1, 2, 3), 0)((acc, xs) => acc + xs) must beEqualTo(List.foldRight(List(1, 2, 3), 0)((acc, xs) => acc + xs))
     }
   }
+
   "append (implemented with foldLeft)" should {
     "insert list 2 after list 1 elements" in {
       List.append(List(1, 2, 3), List(4, 5, 6)) must beEqualTo(List(1, 2, 3, 4, 5, 6))
+    }
+  }
+
+  "flatMap2 (implemented with foldRight)" should {
+    "concatenate n lists into a single list" in {
+      List.flatMap2(List(List(1, 2, 3), List(4, 5, 6))) must beEqualTo(List(1, 2, 3, 4, 5, 6))
     }
   }
 }
