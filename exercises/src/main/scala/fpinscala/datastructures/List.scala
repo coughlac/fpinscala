@@ -94,20 +94,9 @@ object List {
     }
   }
 
-  def foldLeft2[A, B](l: List[A], z: B)(f: (B, A) => B): B = {
-    l match {
-      case Cons(h, t) => foldRight(l, z)((h, z) => f(z, h))
-    }
-    // l match {
-    //   case Cons(h, t) => f(foldRight(t, z)((h, z) => f(z, h)), h)
-    // }
-  }
+  def foldLeft2[A, B](l: List[A], z: B)(f: (B, A) => B): B = foldRight(l, z)((h, z) => f(z, h))
 
-  def foldRight2[A, B](as: List[A], z: B)(f: (A, B) => B): B =
-    as match {
-      case Cons(h, t) => foldLeft(reverse(as), z)((z, h) => f(h, z))
-      //f(h, foldLeft(t, z)((z, h) => f(h, z)))
-    }
+  def foldRight2[A, B](as: List[A], z: B)(f: (A, B) => B): B = foldLeft(reverse(as), z)((z, h) => f(h, z))
 
   def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 
@@ -116,10 +105,5 @@ object List {
     foldLeft(l, copy)((copy, h: A) => Cons(h, copy))
   }
 
-  def flatMap2[A](l: List[List[A]]): List[A] = {
-    val copy: List[A] = Nil
-    l match {
-      case Cons(h, t) => foldRight2(l, copy)((h, copy) => append(h, copy))
-    }
-  }
+  def flatMap2[A](l: List[List[A]]): List[A] = foldRight2(l, Nil: List[A])(append)
 }
