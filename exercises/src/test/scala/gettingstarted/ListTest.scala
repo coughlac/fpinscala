@@ -161,4 +161,10 @@ class ListTest extends org.specs2.mutable.Specification {
       List.flatMap2(List(List(1, 2, 3), List(4, 5, 6))) must beEqualTo(List(1, 2, 3, 4, 5, 6))
     }
   }
+
+  "incrementBy1" should {
+    "add one to each element" in {
+      List.incrementBy1(List(1, 2, 3, 4, 5)) must beEqualTo(List(2, 3, 4, 5, 6))
+    }
+  }
 }

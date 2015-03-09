@@ -94,7 +94,7 @@ object List {
     }
   }
 
-  def foldLeft2[A, B](l: List[A], z: B)(f: (B, A) => B): B = foldRight(l, z)((h, z) => f(z, h))
+  def foldLeft2[A, B](l: List[A], z: B)(f: (B, A) => B): B = foldRight(reverse(l), z)((h, z) => f(z, h))
 
   def foldRight2[A, B](as: List[A], z: B)(f: (A, B) => B): B = foldLeft(reverse(as), z)((z, h) => f(h, z))
 
@@ -106,4 +106,6 @@ object List {
   }
 
   def flatMap2[A](l: List[List[A]]): List[A] = foldRight2(l, Nil: List[A])(append)
+
+  def incrementBy1(l: List[Int]): List[Int] = foldLeft2(l, Nil: List[Int])((ls, elem) => append(ls, Cons(elem +1 , Nil)))
 }
