@@ -165,12 +165,14 @@ class ListTest extends org.specs2.mutable.Specification {
   "incrementBy1" should {
     "add one to each element" in {
       List.incrementBy1(List(1, 2, 3, 4, 5)) must beEqualTo(List(2, 3, 4, 5, 6))
+      List.map[Int, Int](List(1, 2, 3, 4, 5))(_ + 1) must beEqualTo(List(2, 3, 4, 5, 6))
     }
   }
 
   "convert each element in a List[Double] to a String" should {
     "add one to each element" in {
       List.doubleToString(List(1.0, 2.0, 3.0, 4.0, 5.0)) must beEqualTo(List("1.0", "2.0", "3.0", "4.0", "5.0"))
+      List.map[Double, String](List(1.0, 2.0, 3.0, 4.0, 5.0))(_.toString) must beEqualTo(List("1.0", "2.0", "3.0", "4.0", "5.0"))
     }
   }
 }

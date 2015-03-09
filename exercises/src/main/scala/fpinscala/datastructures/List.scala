@@ -99,7 +99,9 @@ object List {
 
   def foldRight2[A, B](as: List[A], z: B)(f: (A, B) => B): B = foldLeft(reverse(as), z)((z, h) => f(h, z))
 
-  def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
+  def map[A, B](l: List[A])(f: A => B): List[B] = {
+    foldLeft2(l, Nil: List[B])((ls, elem) => append(ls, Cons(f(elem), Nil)))
+  }
 
   def reverse[A](l: List[A]): List[A] = {
     val copy: List[A] = Nil
