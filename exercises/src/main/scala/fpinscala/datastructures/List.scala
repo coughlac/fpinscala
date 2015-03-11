@@ -114,12 +114,5 @@ object List {
 
   def doubleToString(list: List[Double]): List[String] = foldLeft2(list, Nil: List[String])((ls, elem) => append(ls, Cons(elem.toString , Nil)))
 
-  def filter[A](as: List[A])(f: A => Boolean): List[A] =
-
-    foldLeft2(as, Nil: List[A])(
-  (ls: List[A], a: A) => {
-    if (f(a))
-    append(ls, Cons(a, Nil))
-    else ls
-  } )
+  def filter[A](as: List[A])(f: A => Boolean): List[A] = foldLeft2(as, Nil: List[A])((ls: List[A], a: A) => if (f(a)) append(ls, Cons(a, Nil)) else ls)
 }
