@@ -24,9 +24,9 @@ object List {
     else Cons(as.head, apply(as.tail: _*))
 
   val x = List(1, 2, 3, 4, 5) match {
-    case Cons(x, Cons(2, Cons(4, _))) => x
+    case Cons(i, Cons(2, Cons(4, _))) => i
     case Nil => 42
-    case Cons(x, Cons(y, Cons(3, Cons(4, _)))) => x + y
+    case Cons(i, Cons(j, Cons(3, Cons(4, _)))) => i + j
     case Cons(h, t) => h + sum(t)
     case _ => 101
   }
@@ -39,7 +39,7 @@ object List {
   def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B = // Utility functions
     as match {
       case Nil => z
-      case Cons(x, xs) => f(x, foldRight(xs, z)(f))
+      case Cons(h, t) => f(h, foldRight(t, z)(f))
     }
 
   def sum2(ns: List[Int]) =
