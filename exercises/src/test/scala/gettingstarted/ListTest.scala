@@ -175,4 +175,10 @@ class ListTest extends org.specs2.mutable.Specification {
       List.map[Double, String](List(1.0, 2.0, 3.0, 4.0, 5.0))(_.toString) must beEqualTo(List("1.0", "2.0", "3.0", "4.0", "5.0"))
     }
   }
+
+  "filter" should {
+    "remove all odd numbers in list as predicate function filters for even elements" in {
+      List.filter(List(1, 2, 3, 4, 5))(x => x % 2 == 0) must beEqualTo (List(2,4))
+    }
+  }
 }
