@@ -179,6 +179,7 @@ class ListTest extends org.specs2.mutable.Specification {
   "filter" should {
     "remove all odd numbers in list as predicate function filters for even elements" in {
       List.filter(List(1, 2, 3, 4, 5))(x => x % 2 == 0) must beEqualTo(List(2, 4))
+      List.filterUsingFlatMap(List(1, 2, 3, 4, 5))(x => x % 2 == 0) must beEqualTo(List(2, 4))
     }
   }
 
