@@ -99,20 +99,19 @@ object List {
 
   def foldRight2[A, B](as: List[A], z: B)(f: (A, B) => B): B = foldLeft(reverse(as), z)((z, h) => f(h, z))
 
-  def map[A, B](l: List[A])(f: A => B): List[B] = {
-    foldLeft2(l, Nil: List[B])((ls, elem) => append(ls, Cons(f(elem), Nil)))
-  }
+  def map[A, B](l: List[A])(f: A => B): List[B] = foldRight2(l, Nil: List[B])((elem, ls) => Cons(f(elem), ls))
 
-  def reverse[A](l: List[A]): List[A] = {
-    val copy: List[A] = Nil
-    foldLeft(l, copy)((copy, h: A) => Cons(h, copy))
-  }
+  def reverse[A](l: List[A]): List[A] = foldLeft(l, Nil: List[A])((t, h) => Cons(h, t))
 
   def flatMap2[A](l: List[List[A]]): List[A] = foldRight2(l, Nil: List[A])(append)
 
-  def incrementBy1(l: List[Int]): List[Int] = foldLeft2(l, Nil: List[Int])((ls, elem) => append(ls, Cons(elem +1 , Nil)))
+  def incrementBy1(l: List[Int]): List[Int] = foldRight2(l, Nil: List[Int])((elem, ls) => Cons(elem + 1, ls))
 
-  def doubleToString(list: List[Double]): List[String] = foldLeft2(list, Nil: List[String])((ls, elem) => append(ls, Cons(elem.toString , Nil)))
+  def doubleToString(list: List[Double]): List[String] = foldRight2(list, Nil: List[String])((elem, ls) => Cons(elem.toString, ls))
 
-  def filter[A](as: List[A])(f: A => Boolean): List[A] = foldLeft2(as, Nil: List[A])((ls: List[A], a: A) => if (f(a)) append(ls, Cons(a, Nil)) else ls)
+  def filter[A](as: List[A])(f: A => Boolean): List[A] = foldRight2(as, Nil: List[A])((a: A, ls: List[A]) => if (f(a)) Cons(a, ls) else ls)
+
+  def flatMap[A, B](l: List[A])(f: A => List[B]): List[B] = {
+    flatMap2(map(l)(f))
+  }
 }
