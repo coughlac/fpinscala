@@ -133,11 +133,20 @@ object List {
   }
 
   @tailrec
+  def isMatch2[A](sup: List[A], sub: List[A]): Boolean = (sup, sub) match {
+    case (Cons(h1, t1), Cons(h2, t2)) if h1 != h2 => false
+    case (Cons(h1, Nil), Cons(h2, t2)) => false
+    case (Cons(h1, t1), Cons(h2, Nil)) => true
+    case (Cons(h1, t1), Cons(h2, t2)) => isMatch2(t1, t2)
+  }
+
+  @tailrec
   def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = (sup, sub) match {
     case (Nil, Nil) => false
     case (Nil, _) => false
     case (_, Nil) => false
-    case (Cons(h, t), _) if isMatch(Cons(h, Nil), t, sub) => true
+    case (Cons(h, t), _) if isMatch2(sup, sub) => true
+    //case (Cons(h, t), _) if isMatch(Cons(h, Nil), t, sub) => true
     case (Cons(h, t), _) => hasSubsequence(t, sub)
   }
 }
