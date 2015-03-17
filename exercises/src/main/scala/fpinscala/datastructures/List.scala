@@ -134,10 +134,10 @@ object List {
 
   @tailrec
   def isMatch2[A](sup: List[A], sub: List[A]): Boolean = (sup, sub) match {
-    case (Cons(h1, t1), Cons(h2, t2)) if h1 != h2 => false
-    case (Cons(h1, Nil), Cons(h2, t2)) => false
-    case (Cons(h1, t1), Cons(h2, Nil)) => true
-    case (Cons(h1, t1), Cons(h2, t2)) => isMatch2(t1, t2)
+    case (Cons(h1, _), Cons(h2, _)) if h1 != h2 => false
+    case (Cons(_, Nil), Cons(_, _)) => false
+    case (Cons(_, _), Cons(_, Nil)) => true
+    case (Cons(_, t1), Cons(_, t2)) => isMatch2(t1, t2)
   }
 
   @tailrec
