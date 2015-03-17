@@ -137,7 +137,7 @@ object List {
     case (Nil, Nil) => false
     case (Nil, _) => false
     case (_, Nil) => false
-    case (Cons(h1, t1), _) if isMatch(Cons(h1, Nil), t1, sub) => true
-    case (Cons(h1, t1), _) => hasSubsequence(t1, sub)
+    case (Cons(h, t), _) if isMatch(Cons(h, Nil), t, sub) => true
+    case (Cons(h, t), _) => hasSubsequence(t, sub)
   }
 }
