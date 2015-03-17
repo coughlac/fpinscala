@@ -1,6 +1,6 @@
 package gettingstarted
 
-import fpinscala.datastructures.{TreeHelper, Branch, Leaf, Tree}
+import fpinscala.datastructures.{TreeHelper, Branch, Leaf}
 
 class TreeTest extends org.specs2.mutable.Specification{
   "size" should {
