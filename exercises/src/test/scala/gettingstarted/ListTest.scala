@@ -188,4 +188,10 @@ class ListTest extends org.specs2.mutable.Specification {
       List.flatMap(List(1, 2, 3))(i => List(i, i)) must beEqualTo(List(1, 1, 2, 2, 3, 3))
     }
   }
+
+  "addingLists" should {
+    "add corresponding elements of the lists together and return the output list" in {
+      List.zipWith(List(1, 2, 3), List(4,5,6))((x, y) => x + y) must beEqualTo(List(5,7,9))
+    }
+  }
 }

@@ -13,7 +13,6 @@ case class Cons[+A](head: A, tail: List[A]) extends List[A]
 // Another data constructor, representing nonempty lists. Note that `tail` is another `List[A]`, which may be `Nil` or another `Cons`.
 
 object List {
-
   // `List` companion object. Contains functions for creating and working with lists.
   def sum(ints: List[Int]): Int = foldLeft(ints, 0)((acc, elem) => acc + elem)
 
@@ -112,10 +111,17 @@ object List {
   def filter[A](as: List[A])(f: A => Boolean): List[A] = foldRight2(as, Nil: List[A])((a: A, ls: List[A]) => if (f(a)) Cons(a, ls) else ls)
 
   def filterUsingFlatMap[A](as: List[A])(f: A => Boolean): List[A] = {
-    flatMap(as)((a: A) => if(f(a)) Cons(a, Nil) else Nil: List[A])
+    flatMap(as)((a: A) => if (f(a)) Cons(a, Nil) else Nil: List[A])
   }
 
   def flatMap[A, B](l: List[A])(f: A => List[B]): List[B] = {
     flatMap2(map(l)(f))
+  }
+
+  def zipWith[A, B, C](xs: List[A], ys: List[B])(f: (A, B) => C): List[C] = (xs, ys) match {
+    case (Nil, Nil) => Nil
+    case (Nil, _) => Nil
+    case (_, Nil) => Nil
+    case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), zipWith(t1, t2)(f))
   }
 }
