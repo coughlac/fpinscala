@@ -191,7 +191,16 @@ class ListTest extends org.specs2.mutable.Specification {
 
   "addingLists" should {
     "add corresponding elements of the lists together and return the output list" in {
-      List.zipWith(List(1, 2, 3), List(4,5,6))((x, y) => x + y) must beEqualTo(List(5,7,9))
+      List.zipWith(List(1, 2, 3), List(4, 5, 6))((x, y) => x + y) must beEqualTo(List(5, 7, 9))
+    }
+  }
+
+  "hasSubsequence" should {
+    "indicates if a sequence is contained within another sequence" in {
+      List.hasSubsequence(List(1, 2, 3, 4), List(4, 5, 6)) must beEqualTo(false)
+      List.hasSubsequence(List(1, 2, 3, 4), List(1, 2)) must beEqualTo(true)
+      List.hasSubsequence(List(1, 2, 3, 4), List(1, 2)) must beEqualTo(true)
+      List.hasSubsequence(List(1, 1, 3, 4), List(1, 3)) must beEqualTo(true)
     }
   }
 }

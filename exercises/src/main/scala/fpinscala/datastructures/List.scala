@@ -124,4 +124,20 @@ object List {
     case (_, Nil) => Nil
     case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), zipWith(t1, t2)(f))
   }
+
+  @tailrec
+  def isMatch[A](partialSup: List[A], supRemainder: List[A], sub: List[A]): Boolean = (partialSup, supRemainder, sub) match {
+    case (_, Nil, _) => false
+    case (h, _, s) if reverse(h) == s => true
+    case (_, Cons(h2, t2), subSeq) => isMatch(Cons(h2, partialSup), t2, subSeq)
+  }
+
+  @tailrec
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = (sup, sub) match {
+    case (Nil, Nil) => false
+    case (Nil, _) => false
+    case (_, Nil) => false
+    case (Cons(h1, t1), _) if isMatch(Cons(h1, Nil), t1, sub) => true
+    case (Cons(h1, t1), _) => hasSubsequence(t1, sub)
+  }
 }
