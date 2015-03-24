@@ -11,6 +11,11 @@ case object TreeHelper {
 
   def maximum(tree: Tree[Int]): Int = maximum(tree, 0)
 
+  def depth[A](tree: Tree[A]): Int = tree match {
+    case a: Branch[A] => 1 + (depth(a.left) max depth(a.right))
+    case a: Leaf[A] => 0
+  }
+
   def map[A, B](tree: Tree[A])(f: A => B): Tree[B] = tree match {
     case a: Branch[A] => new Branch(map(a.left)(f), map(a.right)(f))
     case a: Leaf[A] => Leaf(f(a.value))

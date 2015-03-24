@@ -21,6 +21,14 @@ class TreeTest extends org.specs2.mutable.Specification{
     }
   }
 
+  "depth" should {
+    "return the maximum path length from the root of the tree to any leaf" in {
+      TreeHelper.depth( Leaf(2)) must beEqualTo(0)
+      TreeHelper.depth( Branch(Branch(Leaf(30), Leaf(50)), Branch(Leaf(70), Leaf(90)))) must beEqualTo(2)
+      TreeHelper.depth( Branch(Branch(Branch(Branch(Leaf(4), Leaf(9)), Leaf(4)), Leaf(7)), Leaf(43))) must beEqualTo(4)
+    }
+  }
+
   "map" should {
     "return the maximum element of nodes (leaves and branches) in the tree of ints" in {
       TreeHelper.map( Leaf(2))(i => i + 1) must beEqualTo(Leaf(3))
