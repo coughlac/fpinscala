@@ -20,4 +20,11 @@ class TreeTest extends org.specs2.mutable.Specification{
       TreeHelper.maximum( Branch(Branch(Leaf(4), Leaf(5)), Leaf(1))) must beEqualTo(5)
     }
   }
+
+  "map" should {
+    "return the maximum element of nodes (leaves and branches) in the tree of ints" in {
+      TreeHelper.map( Leaf(2))(i => i + 1) must beEqualTo(Leaf(3))
+      TreeHelper.map( Branch(Branch(Leaf(30), Leaf(50)), Branch(Leaf(70), Leaf(90))))(i => i + 1) must beEqualTo(Branch(Branch(Leaf(31), Leaf(51)), Branch(Leaf(71), Leaf(91))))
+    }
+  }
 }
