@@ -6,7 +6,10 @@ import scala.{Option => _, Some => _, Either => _, _} // hide std library `Optio
 sealed trait Option[+A] {
   def map[B](f: A => B): Option[B] = sys.error("todo")
 
-  def getOrElse[B>:A](default: => B): B = sys.error("todo")
+  def getOrElse[B>:A](default: => B): B = this match {
+    case s: Some[B] => s.get
+    case _ => default
+  }
 
   def flatMap[B](f: A => Option[B]): Option[B] = sys.error("todo")
 
@@ -14,8 +17,12 @@ sealed trait Option[+A] {
 
   def filter(f: A => Boolean): Option[A] = sys.error("todo")
 }
-case class Some[+A](get: A) extends Option[A]
-case object None extends Option[Nothing]
+case class Some[+A](get: A) extends Option[A] {
+ // def getOrElse[B >: A](default: => B): B = get
+}
+case object None extends Option[Nothing] {
+ // def getOrElse[B >: Nothing](default: => B): B = default
+}
 
 object Option {
   def failingFn(i: Int): Int = {
