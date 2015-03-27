@@ -5,14 +5,14 @@ import fpinscala.errorhandling.{Option, Some, None}
 
 class OptionTest extends Specification {
 
-  "Option getOrElse" should {
+  "getOrElse" should {
     "return the value if the option has some value or the default value if the option has none " in {
       Some(5).getOrElse("has no number") must beEqualTo(5)
 
       None.getOrElse("has no number") must beEqualTo("has no number")
     }
   }
-  "Option orElse" should {
+  "orElse" should {
     "return the first Option if its defined otherwise it returns the second Option" in {
       val secondWithSome: Some[Int] = Some(15)
       val secondWithNone: Option[Int] = None
@@ -27,7 +27,7 @@ class OptionTest extends Specification {
     }
   }
 
-  "Option filter" should {
+  "filter" should {
     "return the Option with Some if the predicate is true for the Option's value else None " in {
       val some: Option[Int] = Some(5)
       val none: Option[Int] = None
@@ -38,7 +38,7 @@ class OptionTest extends Specification {
     }
   }
 
-  "Option map" should {
+  "map" should {
     "return the Option with f applied to Some if there is one else None " in {
       val x: Int = 5
       val some: Option[Int] = Some(x)
@@ -48,6 +48,19 @@ class OptionTest extends Specification {
 
       some.map(f) must beEqualTo(Some(msg + x))
       none.map(f) must beEqualTo(None)
+    }
+  }
+
+  "flatMap" should {
+    "return the Option with f applied to Some if there is one else None " in {
+      val x: Int = 5
+      val some: Option[Int] = Some(x)
+      val none: Option[Int] = None
+      val msg = "string value is: "
+      val f: (Int) => Option[String] = x => Some(msg + x)
+
+      some.flatMap(f) must beEqualTo(Some(msg + x))
+      none.flatMap(f) must beEqualTo(None)
     }
   }
 }
