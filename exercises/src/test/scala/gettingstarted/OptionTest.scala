@@ -14,4 +14,18 @@ class OptionTest extends Specification {
       noneValue.getOrElse("has no number") must beEqualTo("has no number")
     }
   }
+  "Option orElse" should {
+    "return the first Option if its defined otherwise it returns the second Option" in {
+      val secondWithSome: Some[Int] = Some(15)
+      val secondWithNone: Option[Int] = None
+
+      val firstWithSome: Option[Int] = Some(5)
+      firstWithSome.orElse(secondWithSome) must beEqualTo(firstWithSome)
+      firstWithSome.orElse(secondWithNone) must beEqualTo(firstWithSome)
+
+      val firstWithNone: Option[Int] = None
+      firstWithNone.orElse(secondWithSome) must beEqualTo(secondWithSome)
+      firstWithNone.orElse(secondWithNone) must beEqualTo(secondWithNone)
+    }
+  }
 }
