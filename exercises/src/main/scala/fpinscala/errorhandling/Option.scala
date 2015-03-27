@@ -17,12 +17,9 @@ sealed trait Option[+A] {
 
   def filter(f: A => Boolean): Option[A] = sys.error("todo")
 }
-case class Some[+A](get: A) extends Option[A] {
- // def getOrElse[B >: A](default: => B): B = get
-}
-case object None extends Option[Nothing] {
- // def getOrElse[B >: Nothing](default: => B): B = default
-}
+
+case class Some[+A](get: A) extends Option[A]
+case object None extends Option[Nothing]
 
 object Option {
   def failingFn(i: Int): Int = {
