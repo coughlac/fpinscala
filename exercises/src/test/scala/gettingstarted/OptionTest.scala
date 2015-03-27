@@ -28,4 +28,15 @@ class OptionTest extends Specification {
       firstWithNone.orElse(secondWithNone) must beEqualTo(secondWithNone)
     }
   }
+
+  "Option filter" should {
+    "return the Option with Some if the predicate is true for the Option's value else None " in {
+      val some: Option[Int] = Some(5)
+      val none: Option[Int] = None
+      some.filter(x => x > 0) must beEqualTo(some)
+      some.filter(x => x > 100) must beEqualTo(None)
+      none.filter(x => x > 0) must beEqualTo(None)
+      none.filter(x => x > 10) must beEqualTo(None)
+    }
+  }
 }

@@ -18,7 +18,10 @@ sealed trait Option[+A] {
     case _ => ob
   }
 
-  def filter(f: A => Boolean): Option[A] = sys.error("todo")
+  def filter(f: A => Boolean): Option[A] = this match {
+    case s: Some[A] if f(s.get) => s
+    case _ => None
+  }
 }
 
 case class Some[+A](get: A) extends Option[A]
