@@ -7,11 +7,9 @@ class OptionTest extends Specification {
 
   "Option getOrElse" should {
     "return the value if the option has some value or the default value if the option has none " in {
-      val someValue: Option[Int] = Some(5)
-      someValue.getOrElse("has no number") must beEqualTo(5)
+      Some(5).getOrElse("has no number") must beEqualTo(5)
 
-      val noneValue: Option[Int] = None
-      noneValue.getOrElse("has no number") must beEqualTo("has no number")
+      None.getOrElse("has no number") must beEqualTo("has no number")
     }
   }
   "Option orElse" should {
@@ -37,6 +35,19 @@ class OptionTest extends Specification {
       some.filter(x => x > 100) must beEqualTo(None)
       none.filter(x => x > 0) must beEqualTo(None)
       none.filter(x => x > 10) must beEqualTo(None)
+    }
+  }
+
+  "Option map" should {
+    "return the Option with f applied to Some if there is one else None " in {
+      val x: Int = 5
+      val some: Option[Int] = Some(x)
+      val none: Option[Int] = None
+      val msg = "string value is: "
+      val f: (Int) => String = x => msg + x
+
+      some.map(f) must beEqualTo(Some(msg + x))
+      none.map(f) must beEqualTo(None)
     }
   }
 }
