@@ -63,4 +63,12 @@ class OptionTest extends Specification {
       none.flatMap(f) must beEqualTo(None)
     }
   }
+
+  "variance" should {
+    "return the mean of (x-m)^2 where x is each element in xs and m is the mean of each element in xs" in {
+      val input: Seq[Double] = Seq(1.0, 2.0, 3.0, 4.0, 5.0)
+
+      Option.variance(input) must beEqualTo(Some(2.0))
+    }
+  }
 }

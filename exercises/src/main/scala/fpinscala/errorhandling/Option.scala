@@ -49,18 +49,7 @@ object Option {
     if (xs.isEmpty) None
     else Some(xs.sum / xs.length)
 
-  def variance(xs: Seq[Double]): Option[Double] = {
-   // variance is the mean of x-m squared for each element x in the seq
-    val m: Option[Double] = mean(xs)
-    m match {
-      case Some(avg) => {
-        val xMinusMean: Seq[Double] = xs.map(x => x - avg)
-        val xMinusMeanSquared: Seq[Double] = xMinusMean.map(x => x * x)
-        mean(xMinusMeanSquared)
-      }
-      case _ => None
-    }
-  }
+  def variance(xs: Seq[Double]): Option[Double] = mean(xs).flatMap(avg => mean(xs.map(x => math.pow(x - avg, 2))))
 
   def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = sys.error("todo")
 
