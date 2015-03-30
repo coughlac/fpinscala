@@ -71,4 +71,16 @@ class OptionTest extends Specification {
       Option.variance(input) must beEqualTo(Some(2.0))
     }
   }
+
+  "map2" should {
+    "return a new Option[C] of the function f applied to Option[A] and Option[B].  " in {
+      val optionA: Option[Double] = Some(2.0)
+      val optionB: Option[Char] = Some('A')
+      val f: (Double, Char) => String = (a: Double, b: Char) => s"A: $a and B: $b"
+
+      Option.map2(optionA, None)(f) must beEqualTo(none)
+      Option.map2(None, optionB)(f) must beEqualTo(none)
+      Option.map2(optionA, optionB)(f ) must beEqualTo(none)
+    }
+  }
 }
