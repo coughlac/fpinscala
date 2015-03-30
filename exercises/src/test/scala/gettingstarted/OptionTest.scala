@@ -78,9 +78,9 @@ class OptionTest extends Specification {
       val optionB: Option[Char] = Some('A')
       val f: (Double, Char) => String = (a: Double, b: Char) => s"A: $a and B: $b"
 
-      Option.map2(optionA, None)(f) must beEqualTo(none)
-      Option.map2(None, optionB)(f) must beEqualTo(none)
-      Option.map2(optionA, optionB)(f ) must beEqualTo(none)
+      Option.map2(optionA, None)(f) must beEqualTo(None)
+      Option.map2(None, optionB)(f) must beEqualTo(None)
+      Option.map2(optionA, optionB)(f) must beEqualTo(Some("A: 2.0 and B: A"))
     }
   }
 }

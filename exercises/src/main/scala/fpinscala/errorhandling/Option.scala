@@ -52,7 +52,10 @@ object Option {
   def variance(xs: Seq[Double]): Option[Double] = mean(xs).flatMap(avg => mean(xs.map(x => math.pow(x - avg, 2))))
 
   def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
-    ???
+    (a, b) match {
+      case (Some(aValue), Some(bValue)) => Some(f(aValue, bValue))
+      case _ => None
+    }
   }
 
   def sequence[A](a: List[Option[A]]): Option[List[A]] = sys.error("todo")
