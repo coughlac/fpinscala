@@ -57,11 +57,7 @@ object Option {
     } yield f(aVal, bVal)
   }
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = {
-    a.foldLeft[Option[List[A]]](Some(Nil)){
-      case (acc: Option[List[A]], elem: Option[A]) => map2(elem, acc)(_ :: _)
-    }.map(_.reverse)
-  }
+  def sequence[A](a: List[Option[A]]): Option[List[A]] = a.foldLeft[Option[List[A]]](Some(Nil))((acc: Option[List[A]], elem: Option[A]) => map2(elem, acc)(_ :: _)).map(_.reverse)
 
   def seq2[A,B](zero: B)(a: List[Option[A]])(f: (A, B) => B): Option[B] = a match {
     case Nil => Some(zero)
