@@ -1,9 +1,5 @@
 package fpinscala.errorhandling
 
-
-import fpinscala.datastructures.Cons
-import fpinscala.errorhandling
-
 import scala.{Option => _, Some => _, Either => _, _} // hide std library `Option`, `Some` and `Either`, since we are writing our own in this chapter
 
 sealed trait Option[+A] {
@@ -55,31 +51,17 @@ object Option {
   def variance(xs: Seq[Double]): Option[Double] = mean(xs).flatMap(avg => mean(xs.map(x => math.pow(x - avg, 2))))
 
   def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
-//    (a, b) match {
-//      case (Some(aValue), Some(bValue)) => Some(f(aValue, bValue))
-//      case _ => None
-//    }
     for {
       aVal <- a
       bVal <- b
     } yield f(aVal, bVal)
   }
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = a match {
-    case Nil => Some(Nil)
-    case head :: rest => {
-      map2(head, sequence(rest))(_ :: _)
-    }
+  def sequence[A](a: List[Option[A]]): Option[List[A]] = {
+    a.foldLeft[Option[List[A]]](Some(Nil)){
+      case (acc: Option[List[A]], elem: Option[A]) => map2(elem, acc)(_ :: _)
+    }.map(_.reverse)
   }
-
-//    a match {
-//    case Nil => Some(Nil)
-//    case Some(head) :: tail => sequence(tail) match {
-//      case None => None
-//      case Some(t) => Some(head :: t)
-//    }
-//    case None :: _ => None
-//  }
 
   def seq2[A,B](zero: B)(a: List[Option[A]])(f: (A, B) => B): Option[B] = a match {
     case Nil => Some(zero)
