@@ -73,7 +73,7 @@ class OptionTest extends Specification {
   }
 
   "map2" should {
-    "return a new Option[C] of the function f applied to Option[A] and Option[B].  " in {
+    "return a new Option[C] of the function f applied to Option[A] and Option[B]." in {
       val optionA: Option[Double] = Some(2.0)
       val optionB: Option[Char] = Some('A')
       val f: (Double, Char) => String = (a: Double, b: Char) => s"A: $a and B: $b"
@@ -81,6 +81,16 @@ class OptionTest extends Specification {
       Option.map2(optionA, None)(f) must beEqualTo(None)
       Option.map2(None, optionB)(f) must beEqualTo(None)
       Option.map2(optionA, optionB)(f) must beEqualTo(Some("A: 2.0 and B: A"))
+    }
+  }
+
+  "sequence" should {
+    "return a new Option[List[A]] from a List[Option[A]] which is None if any of the list of option." in {
+      val optionA: List[Option[Int]] = List(Some(1), Some(2))
+      val optionB: List[Option[Int]] = List(Some(1), None, Some(2))
+
+      Option.seq2(optionA) must beEqualTo(Some(3))
+      Option.seq2(optionB) must beEqualTo(None)
     }
   }
 }
