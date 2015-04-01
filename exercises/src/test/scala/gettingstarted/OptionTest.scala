@@ -84,13 +84,23 @@ class OptionTest extends Specification {
     }
   }
 
+  "seq2" should {
+    "return a new Option[List[A]] from a List[Option[A]] which is None if any of the list of option." in {
+      val optionA: List[Option[Int]] = List(Some(1), Some(2))
+      val optionB: List[Option[Int]] = List(Some(1), None, Some(2))
+
+      Option.seq2(0)(optionA)(_ + _) must beEqualTo(Some(3))
+      Option.seq2(0)(optionB)(_ + _) must beEqualTo(None)
+    }
+  }
+
   "sequence" should {
     "return a new Option[List[A]] from a List[Option[A]] which is None if any of the list of option." in {
       val optionA: List[Option[Int]] = List(Some(1), Some(2))
       val optionB: List[Option[Int]] = List(Some(1), None, Some(2))
 
-      Option.seq2(optionA) must beEqualTo(Some(3))
-      Option.seq2(optionB) must beEqualTo(None)
+      Option.sequence(optionA) must beEqualTo(Some(List(1,2)))
+      Option.sequence(optionB) must beEqualTo(None)
     }
   }
 }

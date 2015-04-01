@@ -62,13 +62,12 @@ object Option {
   }
 
   def sequence[A](a: List[Option[A]]): Option[List[A]] = {
-   // a.flatMap(Option.map2(Some(Nil), Some(y))((x, y) => Some(List(y)))
-  ???
+    seq2[A, List[A]](Nil)(a)(_ :: _)
   }
 
-  def seq2(a: List[Option[Int]]): Option[Int] = a match {
-    case Nil => Some(0)
-    case head :: rest => map2(head, seq2(rest))(_+_)
+  def seq2[A,B](zero: B)(a: List[Option[A]])(f: (A, B) => B): Option[B] = a match {
+    case Nil => Some(zero)
+    case head :: rest => map2(head, seq2(zero)(rest)(f))(f)
   }
 
   def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = sys.error("todo")
