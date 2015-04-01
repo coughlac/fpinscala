@@ -61,9 +61,21 @@ object Option {
     }
   }
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = {
-    seq2[A, List[A]](Nil)(a)(_ :: _)
+  def sequence[A](a: List[Option[A]]): Option[List[A]] = a match {
+    case Nil => Some(Nil)
+    case head :: rest => {
+      map2(head, sequence(rest))(_ :: _)
+    }
   }
+
+//    a match {
+//    case Nil => Some(Nil)
+//    case Some(head) :: tail => sequence(tail) match {
+//      case None => None
+//      case Some(t) => Some(head :: t)
+//    }
+//    case None :: _ => None
+//  }
 
   def seq2[A,B](zero: B)(a: List[Option[A]])(f: (A, B) => B): Option[B] = a match {
     case Nil => Some(zero)
