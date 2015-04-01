@@ -68,11 +68,7 @@ object Option {
 
   def seq2(a: List[Option[Int]]): Option[Int] = a match {
     case Nil => Some(0)
-    case None :: _ => None
-    case Some(head: Int) :: rest => seq2(rest) match {
-      case None => None
-      case Some(value: Int) => Some(head + value)
-    }
+    case head :: rest => map2(head, seq2(rest))(_+_)
   }
 
   def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = sys.error("todo")
