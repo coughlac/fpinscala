@@ -103,4 +103,17 @@ class OptionTest extends Specification {
       Option.sequence(optionB) must beEqualTo(None)
     }
   }
+
+  "traverse" should {
+    "return a new Option[List[B]] from a List[A] which is None if " +
+      "any of the list elements is None after applying f." in {
+      val list: List[String] = List("1", "2")
+      val badList: List[String] = List("z", "2")
+      val emptyList: List[String] = List()
+
+      Option.traverse[String, Int](list)(x => Option.Try(x.toInt)) must beEqualTo(Some(List(1, 2)))
+      Option.traverse[String, Int](badList)(x => Option.Try(x.toInt)) must beEqualTo(None)
+      Option.traverse[String, Int](emptyList)(x => Option.Try(x.toInt)) must beEqualTo(Some(emptyList))
+    }
+  }
 }

@@ -63,6 +63,17 @@ object Option {
     case Nil => Some(zero)
     case head :: rest => map2(head, seq2(zero)(rest)(f))(f)
   }
+  //map over a list using a function that might fail,
+  //returning None if applying it to any element of the list returns None
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = a match {
+    //sequence(a.map(f))
+    case Nil => Some(Nil)
+    case head :: tail => map2(f(head), traverse(tail)(f))(_ :: _)
+  }
 
-  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = sys.error("todo")
+  def Try[A](a: => A): Option[A] = {
+    try Some(a) catch {
+      case e: Exception => None
+    }
+  }
 }
