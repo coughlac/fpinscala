@@ -62,17 +62,18 @@ class EitherTest extends Specification {
 //    }
 //  }
 //
-//  "map2" should {
-//    "return a new Option[C] of the function f applied to Option[A] and Option[B]." in {
-//      val optionA: Option[Double] = Some(2.0)
-//      val optionB: Option[Char] = Some('A')
-//      val f: (Double, Char) => String = (a: Double, b: Char) => s"A: $a and B: $b"
-//
-//      Option.map2(optionA, None)(f) must beEqualTo(None)
-//      Option.map2(None, optionB)(f) must beEqualTo(None)
-//      Option.map2(optionA, optionB)(f) must beEqualTo(Some("A: 2.0 and B: A"))
-//    }
-//  }
+  "map2" should {
+    "return a new Either[C] of the function f applied to Either[A] and Either[B]." in {
+      val eitherA: Either[String, Double] = Right(2.0)
+      val eitherB: Either[String, Char] = Right('A')
+      val f: (Double, Char) => String = (a: Double, b: Char) => s"A: $a and B: $b"
+
+      val errorEither = Left("error occurred.")
+      eitherA.map2(errorEither)(f) must beEqualTo(errorEither)
+      errorEither.map2(eitherB)(f) must beEqualTo(errorEither)
+      eitherA.map2(eitherB)(f) must beEqualTo(Right("A: 2.0 and B: A"))
+    }
+  }
 //
 //  "seq2" should {
 //    "return a new Option[List[A]] from a List[Option[A]] which is None if any of the list of option." in {
