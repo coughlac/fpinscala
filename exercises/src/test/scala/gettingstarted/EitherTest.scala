@@ -85,15 +85,16 @@ class EitherTest extends Specification {
 //    }
 //  }
 //
-//  "sequence" should {
-//    "return a new Option[List[A]] from a List[Option[A]] which is None if any of the list of option." in {
-//      val optionA: List[Option[Int]] = List(Some(1), Some(2))
-//      val optionB: List[Option[Int]] = List(Some(1), None, Some(2))
-//
-//      Option.sequence(optionA) must beEqualTo(Some(List(1,2)))
-//      Option.sequence(optionB) must beEqualTo(None)
-//    }
-//  }
+  "sequence" should {
+    "return a new Option[List[A]] from a List[Option[A]] which is None if any of the list of option." in {
+      val eitherA: List[Either[String, Int]] = List(Right(1), Right(2))
+      val error: Left[String] = Left("Error occurred.")
+      val eitherB: List[Either[String, Int]] = List(Right(1), error, Right(2))
+
+      Either.sequence(eitherA) must beEqualTo(Right(List(1,2)))
+      Either.sequence(eitherB) must beEqualTo(error)
+    }
+  }
 //
 //  "traverse" should {
 //    "return a new Option[List[B]] from a List[A] which is None if " +
