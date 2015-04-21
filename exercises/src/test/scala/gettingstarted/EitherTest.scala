@@ -74,17 +74,7 @@ class EitherTest extends Specification {
       eitherA.map2(eitherB)(f) must beEqualTo(Right("A: 2.0 and B: A"))
     }
   }
-//
-//  "seq2" should {
-//    "return a new Option[List[A]] from a List[Option[A]] which is None if any of the list of option." in {
-//      val optionA: List[Option[Int]] = List(Some(1), Some(2))
-//      val optionB: List[Option[Int]] = List(Some(1), None, Some(2))
-//
-//      Option.seq2(0)(optionA)(_ + _) must beEqualTo(Some(3))
-//      Option.seq2(0)(optionB)(_ + _) must beEqualTo(None)
-//    }
-//  }
-//
+
   "sequence" should {
     "return a new Option[List[A]] from a List[Option[A]] which is None if any of the list of option." in {
       val eitherA: List[Either[String, Int]] = List(Right(1), Right(2))
@@ -95,17 +85,17 @@ class EitherTest extends Specification {
       Either.sequence(eitherB) must beEqualTo(error)
     }
   }
-//
-//  "traverse" should {
-//    "return a new Option[List[B]] from a List[A] which is None if " +
-//      "any of the list elements is None after applying f." in {
-//      val list: List[String] = List("1", "2")
-//      val badList: List[String] = List("z", "2")
-//      val emptyList: List[String] = List()
-//
-//      Option.traverse[String, Int](list)(x => Option.Try(x.toInt)) must beEqualTo(Some(List(1, 2)))
-//      Option.traverse[String, Int](badList)(x => Option.Try(x.toInt)) must beEqualTo(None)
-//      Option.traverse[String, Int](emptyList)(x => Option.Try(x.toInt)) must beEqualTo(Some(emptyList))
-//    }
-//  }
+
+  "traverse" should {
+    "return a new Either[E, List[B]] from a List[A] which is E if " +
+      "any of the list elements is E after applying f." in {
+      val list: List[String] = List("1", "2")
+      val badList: List[String] = List("z", "2")
+      val emptyList: List[String] = List()
+
+      Either.traverse[Exception, String, Int](list)(x => Either.Try(x.toInt)) must beEqualTo(Right(List(1, 2)))
+     // Either.traverse[Exception, String, Int](badList)(x => Either.Try(x.toInt)) must beLeft[Either[Exception, List[Int]]]
+      Either.traverse[Exception, String, Int](emptyList)(x => Either.Try(x.toInt)) must beEqualTo(Right(emptyList))
+    }
+  }
 }
