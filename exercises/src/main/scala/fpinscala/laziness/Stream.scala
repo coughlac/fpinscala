@@ -1,5 +1,4 @@
 package fpinscala.laziness
-
 import Stream._
 trait Stream[+A] {
 
@@ -26,9 +25,15 @@ trait Stream[+A] {
   def forAll(p: A => Boolean): Boolean = sys.error("todo")
 
   def startsWith[B](s: Stream[B]): Boolean = sys.error("todo")
+
+  def toList: List[A]
 }
-case object Empty extends Stream[Nothing]
-case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
+case object Empty extends Stream[Nothing]{
+  override def toList: List[Nothing] = Nil
+}
+case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A] {
+  override def toList: List[A] = h() :: t().toList
+}
 
 object Stream {
   def cons[A](hd: => A, tl: => Stream[A]): Stream[A] = {
