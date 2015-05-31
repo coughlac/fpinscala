@@ -16,45 +16,35 @@ class LazyTest extends org.specs2.mutable.Specification {
     "not change the original stream if it is empty" in {
       Empty.take(3) must beEqualTo(Empty)
     }
-  }
 
-  "take of 0 elements" should {
-    "return an Empty Stream" in {
+    "return an Empty Stream if n was 0" in {
       val actualStream = Cons(() ⇒ "A",  () ⇒ Cons(() ⇒ "B", () ⇒ Cons(() ⇒ "C", () ⇒ Empty)))
       actualStream.take(0) must beEqualTo(Empty)
     }
-  }
 
-  "take n elements of stream" should {
     "take n elements from the head of the stream" in {
       val actualStream = Cons(() ⇒ "A",  () ⇒ Cons(() ⇒ "B", () ⇒ Cons(() ⇒ "C", () ⇒ Empty)))
       val expectedStream = Cons(() ⇒ "A",  () ⇒ Cons(() ⇒ "B", ()⇒ Empty))
       actualStream.take(2).toList must beEqualTo(expectedStream.toList)
     }
-  }
 
-  "take more elements of stream than it has" should {
-    "return the original stream" in {
+    "return the original stream if n is greater than the size of the original stream" in {
       val actualStream = Cons(() ⇒ "A",  () ⇒ Cons(() ⇒ "B", () ⇒ Cons(() ⇒ "C", () ⇒ Empty)))
       val expectedStream = actualStream
       actualStream.take(4).toList must beEqualTo(expectedStream.toList)
     }
   }
 
-  "drop of an empty stream" should {
-    "not change the original stream" in {
+  "drop" should {
+    "not change the original stream if it was an empty stream" in {
       Empty.drop(3) must beEqualTo(Empty)
     }
-  }
 
-  "drop 0 elements" should {
-    "not change the original stream" in {
+    "not change the original stream if n was 0" in {
       val actualStream = Cons(() ⇒ "A",  () ⇒ Cons(() ⇒ "B", () ⇒ Cons(() ⇒ "C", () ⇒ Empty)))
       actualStream.drop(0) must beEqualTo(actualStream)
     }
-  }
 
-  "drop n elements of stream" should {
     "take n elements from the head of the stream" in {
       val actualStream = Cons(() ⇒ "A",  () ⇒ Cons(() ⇒ "B", () ⇒ Cons(() ⇒ "C", () ⇒ Empty)))
       val expectedStream = Cons(() ⇒ "C", () ⇒ Empty)
