@@ -16,9 +16,17 @@ trait Stream[+A] {
     case Empty => None
     case Cons(h, t) => if (f(h())) Some(h()) else t().find(f)
   }
-  def take(n: Int): Stream[A] = sys.error("todo")
+  def take(n: Int): Stream[A] = this match {
+    case Empty                ⇒ Empty
+    case _          if n == 0 ⇒ Empty
+    case Cons(h, t)           ⇒ Cons(h, () ⇒ t().take(n - 1))
+  }
 
-  def drop(n: Int): Stream[A] = sys.error("todo")
+  def drop(n: Int): Stream[A] = this match {
+    case Empty                ⇒ Empty
+    case Cons(h, t) if n == 0 ⇒ this
+    case Cons(h, t)           ⇒ t().drop(n-1)
+  }
 
   def takeWhile(p: A => Boolean): Stream[A] = sys.error("todo")
 
@@ -26,14 +34,13 @@ trait Stream[+A] {
 
   def startsWith[B](s: Stream[B]): Boolean = sys.error("todo")
 
-  def toList: List[A]
+  def toList: List[A] = this match {
+    case Empty => Nil
+    case Cons(h, t) => h() :: t().toList
+  }
 }
-case object Empty extends Stream[Nothing]{
-  override def toList: List[Nothing] = Nil
-}
-case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A] {
-  override def toList: List[A] = h() :: t().toList
-}
+case object Empty extends Stream[Nothing]
+case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
 
 object Stream {
   def cons[A](hd: => A, tl: => Stream[A]): Stream[A] = {
