@@ -74,4 +74,20 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       actualStream.takeWhile(!_.equals("C")).toList must beEqualTo(expectedStream.toList)
     }
   }
+
+  "forAll" should {
+    "returns true if the stream is empty" in {
+      Empty.forAll(_.equals("C")) must beTrue
+    }
+
+    "returns false if all the elements of a Stream do not pass the predicate" in {
+      val actualStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      actualStream.forAll(_ != 2) must beFalse
+    }
+
+    "returns true if all the elements of a Stream pass the predicate" in {
+      val actualStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      actualStream.forAll(_ < 5) must beTrue
+    }
+  }
 }
