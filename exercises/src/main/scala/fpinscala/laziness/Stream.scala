@@ -35,6 +35,12 @@ trait Stream[+A] {
     foldRight(empty: Stream[A])((h, acc) => if (p(h)) cons(h, acc) else empty)
 
   def forAll(p: A => Boolean): Boolean = foldRight(true)((h, acc) => p(h) && acc)
+//  Optionally selects the first element.
+//
+//    Note: might return different results for different runs, unless the underlying collection type is ordered.
+//  returns
+//  the first element of this traversable collection if it is nonempty, None if it is empty.
+  def headOption: Option[A] = foldRight(None: Option[A])((h, acc) ⇒ Some(h))
 
   def startsWith[B](s: Stream[B]): Boolean = sys.error("todo")
 

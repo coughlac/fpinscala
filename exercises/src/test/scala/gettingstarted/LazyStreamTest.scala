@@ -90,4 +90,15 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       actualStream.forAll(_ < 5) must beTrue
     }
   }
+
+  "headOption" should {
+    "returns Some[A] if the stream is not empty" in {
+      val actualStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      actualStream.headOption must beEqualTo(Some(1))
+    }
+
+    "returns None if the stream is empty" in {
+      Empty.headOption must beEqualTo(None)
+    }
+  }
 }
