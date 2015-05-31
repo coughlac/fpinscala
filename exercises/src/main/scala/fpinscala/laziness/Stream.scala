@@ -1,5 +1,7 @@
 package fpinscala.laziness
 
+import fpinscala.laziness.Stream._
+
 trait Stream[+A] {
 
   def foldRight[B](z: => B)(f: (A, => B) => B): B = // The arrow `=>` in front of the argument type `B` means that the function `f` takes its second argument by name and may choose not to evaluate it.
@@ -29,10 +31,8 @@ trait Stream[+A] {
     case Cons(h, t)           ⇒ t().drop(n-1)
   }
 
-  def takeWhile(p: A => Boolean): Stream[A] = this match {
-    case Cons(h, t) if p(h()) ⇒ Cons(h, () ⇒ t().takeWhile(p))
-    case _                    ⇒ Empty
-  }
+  def takeWhile(p: A => Boolean): Stream[A] =
+    foldRight(empty: Stream[A])((h, acc) => if (p(h)) cons(h, acc) else empty)
 
   def forAll(p: A => Boolean): Boolean = foldRight(true)((h, acc) => p(h) && acc)
 
@@ -59,7 +59,7 @@ object Stream {
     if (as.isEmpty) empty 
     else cons(as.head, apply(as.tail: _*))
 
-  val ones: Stream[Int] = Stream.cons(1, ones)
+  val ones: Stream[Int] = cons(1, ones)
   def from(n: Int): Stream[Int] = sys.error("todo")
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
