@@ -2,7 +2,7 @@ package gettingstarted
 
 import fpinscala.laziness.{Cons, Empty}
 
-class LazyTest extends org.specs2.mutable.Specification {
+class LazyStreamTest extends org.specs2.mutable.Specification {
   "toList" should {
     "return Nil if stream is empty" in {
       Empty.toList should beEqualTo(Nil)
