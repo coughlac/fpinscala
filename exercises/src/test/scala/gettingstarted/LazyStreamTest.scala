@@ -101,4 +101,17 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       Empty.headOption must beEqualTo(None)
     }
   }
+
+  "map" should {
+    "return an empty stream if the original stream was empty" in {
+      val originalStream = Empty
+      originalStream.map("hello") must beEqualTo(Empty)
+    }
+    "return a stream of all the elements from the original stream with f applied to each" in {
+      val originalStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      val expectedStream = Cons(() ⇒ 10, () ⇒ Cons(() ⇒ 20, () ⇒ Cons(() ⇒ 30, () ⇒ Cons(() ⇒ 40, () ⇒ Empty))))
+
+      originalStream.map(_ * 10).toList must beEqualTo(expectedStream.toList)
+    }
+  }
 }
