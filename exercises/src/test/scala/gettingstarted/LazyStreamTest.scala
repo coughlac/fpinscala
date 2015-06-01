@@ -123,4 +123,13 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       originalStream.filter(x => x % 2 == 0).toList must beEqualTo(expectedStream.toList)
     }
   }
+
+  "append" should {
+    "leave the original stream unchanged if the stream to be appended is empty" in {
+      val originalStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      val additionalStream = Empty
+      val expectedStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      originalStream.append(additionalStream).toList must beEqualTo(expectedStream.toList)
+    }
+  }
 }
