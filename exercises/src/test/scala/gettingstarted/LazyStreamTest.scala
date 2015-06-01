@@ -131,5 +131,14 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       val expectedStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
       originalStream.append(additionalStream).toList must beEqualTo(expectedStream.toList)
     }
+
+    "add the contents of the stream argument to the original stream u" in {
+      val originalStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      val additionalStream = Cons(() ⇒ 10, () ⇒ Cons(() ⇒ 20, () ⇒ Cons(() ⇒ 30, () ⇒ Cons(() ⇒ 40, () ⇒ Empty))))
+      val expectedStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4,
+        () ⇒ Cons(() ⇒ 10, () ⇒ Cons(() ⇒ 20, () ⇒ Cons(() ⇒ 30, () ⇒ Cons(() ⇒ 40, () ⇒ Empty ))))))))
+      originalStream.append(additionalStream).toList must beEqualTo(expectedStream.toList)
+    }
   }
+
 }
