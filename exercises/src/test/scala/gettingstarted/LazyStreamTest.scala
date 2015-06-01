@@ -107,11 +107,20 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       val originalStream = Empty
       originalStream.map("hello") must beEqualTo(Empty)
     }
+
     "return a stream of all the elements from the original stream with f applied to each" in {
       val originalStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
       val expectedStream = Cons(() ⇒ 10, () ⇒ Cons(() ⇒ 20, () ⇒ Cons(() ⇒ 30, () ⇒ Cons(() ⇒ 40, () ⇒ Empty))))
 
       originalStream.map(_ * 10).toList must beEqualTo(expectedStream.toList)
+    }
+  }
+
+  "filter" should {
+    "remove all odd numbers in list as predicate function filters for even elements" in {
+      val originalStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      val expectedStream = Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))
+      originalStream.filter(x => x % 2 == 0).toList must beEqualTo(expectedStream.toList)
     }
   }
 }

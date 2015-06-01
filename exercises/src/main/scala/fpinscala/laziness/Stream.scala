@@ -50,6 +50,11 @@ trait Stream[+A] {
   }
 
   def map[B](f: A => B): Stream[B] = foldRight(empty[B])((h, acc) => cons[B](f(h), acc))
+
+  def filter(p: A => Boolean): Stream[A] = foldRight(empty[A])((h, acc) => (h, acc) match{
+    case (head, s) if p(head) => cons(head, s)
+    case _ => acc
+  })
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
