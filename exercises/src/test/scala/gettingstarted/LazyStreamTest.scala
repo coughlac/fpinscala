@@ -141,4 +141,11 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
     }
   }
 
+  "flatMap" should {
+    "return a stream with f applied to each element in the original stream and flattened" in {
+      val originalStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      val expectedStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      originalStream.flatMap(i => Cons(() => i, () => Empty)).toList must beEqualTo(expectedStream.toList)
+    }
+  }
 }
