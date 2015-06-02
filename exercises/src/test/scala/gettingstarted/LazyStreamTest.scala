@@ -148,4 +148,10 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       originalStream.flatMap(i => Cons(() => i, () => Empty)).toList must beEqualTo(expectedStream.toList)
     }
   }
+
+  "constant" should {
+    "return an infinite stream with a" in {
+      Empty.constant(1).take(100).toList must beEqualTo(fpinscala.laziness.Stream.ones.take(100).toList)
+    }
+  }
 }
