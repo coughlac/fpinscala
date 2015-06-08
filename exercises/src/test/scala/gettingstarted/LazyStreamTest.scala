@@ -22,6 +22,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
 
     "return an Empty Stream if n was 0" in {
       val actualStream = Cons(() ⇒ "A", () ⇒ Cons(() ⇒ "B", () ⇒ Cons(() ⇒ "C", () ⇒ Empty)))
+
       actualStream.take(0) must beEqualTo(Empty)
     }
 
@@ -47,6 +48,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
 
     "not change the original stream if n was 0" in {
       val actualStream = Cons(() ⇒ "A", () ⇒ Cons(() ⇒ "B", () ⇒ Cons(() ⇒ "C", () ⇒ Empty)))
+
       actualStream.drop(0) must beEqualTo(actualStream)
     }
 
@@ -65,12 +67,14 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
 
     "return an Empty Stream if predicate was never met" in {
       val actualStream = Cons(() ⇒ "A", () ⇒ Cons(() ⇒ "B", () ⇒ Cons(() ⇒ "C", () ⇒ Empty)))
+
       actualStream.takeWhile(_.equals(1)) must beEqualTo(Empty)
     }
 
     "returns elements of a Stream just until the predicate fails" in {
       val actualStream = Cons(() ⇒ "A", () ⇒ Cons(() ⇒ "B", () ⇒ Cons(() ⇒ "C", () ⇒ Cons(() ⇒ "D", () ⇒ Empty))))
       val expectedStream = Cons(() ⇒ "A", () ⇒ Cons(() ⇒ "B", () ⇒ Empty))
+
       actualStream.takeWhile(!_.equals("C")).toList must beEqualTo(expectedStream.toList)
     }
   }
@@ -87,6 +91,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
 
     "returns true if all the elements of a Stream pass the predicate" in {
       val actualStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+
       actualStream.forAll(_ < 5) must beTrue
     }
   }
@@ -94,6 +99,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
   "headOption" should {
     "returns Some[A] if the stream is not empty" in {
       val actualStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+
       actualStream.headOption must beEqualTo(Some(1))
     }
 
@@ -120,6 +126,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
     "remove all odd numbers in list as predicate function filters for even elements" in {
       val originalStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
       val expectedStream = Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))
+
       originalStream.filter(x => x % 2 == 0).toList must beEqualTo(expectedStream.toList)
     }
   }
@@ -129,6 +136,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       val originalStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
       val additionalStream = Empty
       val expectedStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+
       originalStream.append(additionalStream).toList must beEqualTo(expectedStream.toList)
     }
 
@@ -137,6 +145,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       val additionalStream = Cons(() ⇒ 10, () ⇒ Cons(() ⇒ 20, () ⇒ Cons(() ⇒ 30, () ⇒ Cons(() ⇒ 40, () ⇒ Empty))))
       val expectedStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4,
         () ⇒ Cons(() ⇒ 10, () ⇒ Cons(() ⇒ 20, () ⇒ Cons(() ⇒ 30, () ⇒ Cons(() ⇒ 40, () ⇒ Empty ))))))))
+
       originalStream.append(additionalStream).toList must beEqualTo(expectedStream.toList)
     }
   }
@@ -145,6 +154,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
     "return a stream with f applied to each element in the original stream and flattened" in {
       val originalStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
       val expectedStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+
       originalStream.flatMap(i => Cons(() => i, () => Empty)).toList must beEqualTo(expectedStream.toList)
     }
   }
@@ -152,6 +162,14 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
   "constant" should {
     "return an infinite stream with a" in {
       Empty.constant(1).take(100).toList must beEqualTo(fpinscala.laziness.Stream.ones.take(100).toList)
+    }
+  }
+
+  "from" should {
+    "return an infinite stream with a" in {
+      val expectedStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+
+      Empty.from(1).take(4).toList must beEqualTo(expectedStream.toList)
     }
   }
 }

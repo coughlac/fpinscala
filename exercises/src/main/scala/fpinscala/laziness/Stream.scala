@@ -61,6 +61,8 @@ trait Stream[+A] {
   def flatMap[B](f: A => Stream[B]): Stream[B] = foldRight(empty[B])((h, acc) => f(h).append(acc))
 
   def constant[B](b: B): Stream[B] = empty.append(cons(b, constant(b)))
+
+  def from(n: Int): Stream[Int] = empty.append(cons(n, from(n + 1)))
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
