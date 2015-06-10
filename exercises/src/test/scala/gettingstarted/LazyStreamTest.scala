@@ -1,6 +1,6 @@
 package gettingstarted
 
-import fpinscala.laziness.{Cons, Empty}
+import fpinscala.laziness.{Cons, Empty, Stream}
 
 class LazyStreamTest extends org.specs2.mutable.Specification {
   "toList" should {
@@ -161,7 +161,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
 
   "constant" should {
     "return an infinite stream with a" in {
-      Empty.constant(1).take(100).toList must beEqualTo(fpinscala.laziness.Stream.ones.take(100).toList)
+      Stream.constant(1).take(100).toList must beEqualTo(Stream.ones.take(100).toList)
     }
   }
 
@@ -169,7 +169,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
     "return an infinite stream with a" in {
       val expectedStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
 
-      Empty.from(1).take(4).toList must beEqualTo(expectedStream.toList)
+      Stream.from(1).take(4).toList must beEqualTo(expectedStream.toList)
     }
   }
 

@@ -60,10 +60,6 @@ trait Stream[+A] {
 
   def flatMap[B](f: A => Stream[B]): Stream[B] = foldRight(empty[B])((h, acc) => f(h).append(acc))
 
-  def constant[B](b: B): Stream[B] = cons(b, constant(b))
-
-  def from(n: Int): Stream[Int] = cons(n, from(n + 1))
-
   def fibs(n: Int): Stream[Int] = {
     def generateNextFibonacciNumber(prev: Int, current: Int): Stream[Int] = {
       val next = prev + current
