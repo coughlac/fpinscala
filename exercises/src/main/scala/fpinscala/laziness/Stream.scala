@@ -2,6 +2,8 @@ package fpinscala.laziness
 
 import fpinscala.laziness.Stream._
 
+import scala.annotation.tailrec
+
 trait Stream[+A] {
 
   def foldRight[B](z: => B)(f: (A, => B) => B): B = // The arrow `=>` in front of the argument type `B` means that the function `f` takes its second argument by name and may choose not to evaluate it.
@@ -63,8 +65,18 @@ trait Stream[+A] {
   def constant[B](b: B): Stream[B] = empty.append(cons(b, constant(b)))
 
   def from(n: Int): Stream[Int] = empty.append(cons(n, from(n + 1)))
+
+  def fibs(n: Int): Stream[Int] = {
+    @tailrec
+    def generateNextFibonacciNumber(prev: Int, current: Int, a: Stream[Int]): Stream[Int] = {
+      val next = prev + current
+      generateNextFibonacciNumber(current, next, a.append(cons(next, empty)))
+    }
+    generateNextFibonacciNumber(n, n+1, empty.append(cons(n, cons(n+1, empty))))
+  }
 }
 case object Empty extends Stream[Nothing]
+
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
 
 object Stream {

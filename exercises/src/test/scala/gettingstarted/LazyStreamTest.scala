@@ -172,4 +172,12 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       Empty.from(1).take(4).toList must beEqualTo(expectedStream.toList)
     }
   }
+
+  "fibs" should {
+    "return an infinite stream of fibonacci numbers 0, 1, 1, 2, 3, 5, 8 etc" in {
+      val expectedStream =  Cons(() ⇒ 0, () ⇒ Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 5, () ⇒ Cons(() ⇒ 8, () ⇒ Empty)))))))
+
+      Empty.fibs(0).take(7).toList must beEqualTo(expectedStream.toList)
+    }
+  }
 }
