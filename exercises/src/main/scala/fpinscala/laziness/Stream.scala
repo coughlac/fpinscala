@@ -59,14 +59,6 @@ trait Stream[+A] {
   def append[B >: A](a2: Stream[B]): Stream[B] = foldRight(a2)((h, acc) => cons(h, acc))
 
   def flatMap[B](f: A => Stream[B]): Stream[B] = foldRight(empty[B])((h, acc) => f(h).append(acc))
-
-  def fibs(n: Int): Stream[Int] = {
-    def generateNextFibonacciNumber(prev: Int, current: Int): Stream[Int] = {
-      val next = prev + current
-      cons(prev, generateNextFibonacciNumber(current, next))
-    }
-    generateNextFibonacciNumber(n, n+1)
-  }
 }
 case object Empty extends Stream[Nothing]
 
@@ -90,6 +82,14 @@ object Stream {
   def constant[B](b: B): Stream[B] = cons(b, constant(b))
 
   def from(n: Int): Stream[Int] = cons(n, from(n + 1))
+
+  def fibs(n: Int): Stream[Int] = {
+    def generateNextFibonacciNumber(prev: Int, current: Int): Stream[Int] = {
+      val next = prev + current
+      cons(prev, generateNextFibonacciNumber(current, next))
+    }
+    generateNextFibonacciNumber(n, n+1)
+  }
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
 }
