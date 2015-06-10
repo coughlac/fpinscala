@@ -78,10 +78,13 @@ object Stream {
     else cons(as.head, apply(as.tail: _*))
 
   val ones: Stream[Int] = cons(1, constant(1))
+  val onesAlt: Stream[Int] = Stream.unfold(1) { case x ⇒ Some(x, x) }
 
   def constant[B](b: B): Stream[B] = cons(b, constant(b))
+  def constantAlt[B](b: B): Stream[B] = Stream.unfold(b) { case x ⇒ Some(x, x) }
 
   def from(n: Int): Stream[Int] = cons(n, from(n + 1))
+  def fromAlt(n: Int): Stream[Int] = Stream.unfold(n) { case x ⇒ Some(x, x + 1) }
 
   def fibs(n: Int): Stream[Int] = {
     def generateNextFibonacciNumber(prev: Int, current: Int): Stream[Int] = {
@@ -91,5 +94,25 @@ object Stream {
     generateNextFibonacciNumber(n, n+1)
   }
 
-  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
+  def fibsAlt(n: Int): Stream[Int] = {
+    type States = (Int, Int)
+    val seed: States = (n, n + 1)
+
+    Stream.unfold[Int, States](seed)(
+      (states: States) ⇒ {
+        val prev = states._1
+        val current = states._2
+        val next = prev + current
+        Some((prev, (current, next)))
+      }
+    )
+  }
+
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = {
+    def loop(result: Option[(A, S)]): Stream[A] = result match {
+      case None ⇒ empty
+      case Some(tuple) ⇒ cons(tuple._1, loop(f(tuple._2)))
+    }
+    loop(f(z))
+  }
 }

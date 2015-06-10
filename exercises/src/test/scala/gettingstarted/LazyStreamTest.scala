@@ -180,4 +180,28 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       Stream.fibs(0).take(7).toList must beEqualTo(expectedStream.toList)
     }
   }
+
+  "unfold" should {
+    "take an initial state an a function for producing both the next state and the next value in the generated stream. " +
+      "Option is used to indicate when the Stream should be terminated, if at all." in {
+      val expectedStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      Stream.unfold(0)({ case 4 ⇒ None case x ⇒ Some(x+1, x+1) }).toList must beEqualTo(expectedStream.toList)
+    }
+
+    "as an implementation of the ones function" in {
+      Stream.onesAlt.take(6).toList must beEqualTo(Stream.ones.take(6).toList)
+    }
+
+    "as an implementation of the constant function" in {
+      Stream.constantAlt(9).take(6).toList must beEqualTo(Stream.constant(9).take(6).toList)
+    }
+
+    "as an implementation of the from function" in {
+      Stream.fromAlt(1).take(4).toList  must beEqualTo(Stream.from(1).take(4).toList)
+    }
+
+    "as an implementation of the fibonacci function" in {
+      Stream.fibsAlt(0).take(7).toList must beEqualTo(Stream.fibs(0).take(7).toList)
+    }
+  }
 }
