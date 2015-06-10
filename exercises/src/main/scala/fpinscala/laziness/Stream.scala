@@ -67,12 +67,11 @@ trait Stream[+A] {
   def from(n: Int): Stream[Int] = empty.append(cons(n, from(n + 1)))
 
   def fibs(n: Int): Stream[Int] = {
-    @tailrec
-    def generateNextFibonacciNumber(prev: Int, current: Int, a: Stream[Int]): Stream[Int] = {
+    def generateNextFibonacciNumber(prev: Int, current: Int): Stream[Int] = {
       val next = prev + current
-      generateNextFibonacciNumber(current, next, a.append(cons(next, empty)))
+      cons(prev, generateNextFibonacciNumber(current, next))
     }
-    generateNextFibonacciNumber(n, n+1, empty.append(cons(n, cons(n+1, empty))))
+    generateNextFibonacciNumber(n, n+1)
   }
 }
 case object Empty extends Stream[Nothing]
