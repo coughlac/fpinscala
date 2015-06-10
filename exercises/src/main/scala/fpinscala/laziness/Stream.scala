@@ -2,8 +2,6 @@ package fpinscala.laziness
 
 import fpinscala.laziness.Stream._
 
-import scala.annotation.tailrec
-
 trait Stream[+A] {
 
   def foldRight[B](z: => B)(f: (A, => B) => B): B = // The arrow `=>` in front of the argument type `B` means that the function `f` takes its second argument by name and may choose not to evaluate it.
@@ -62,9 +60,9 @@ trait Stream[+A] {
 
   def flatMap[B](f: A => Stream[B]): Stream[B] = foldRight(empty[B])((h, acc) => f(h).append(acc))
 
-  def constant[B](b: B): Stream[B] = empty.append(cons(b, constant(b)))
+  def constant[B](b: B): Stream[B] = cons(b, constant(b))
 
-  def from(n: Int): Stream[Int] = empty.append(cons(n, from(n + 1)))
+  def from(n: Int): Stream[Int] = cons(n, from(n + 1))
 
   def fibs(n: Int): Stream[Int] = {
     def generateNextFibonacciNumber(prev: Int, current: Int): Stream[Int] = {
@@ -91,9 +89,11 @@ object Stream {
     if (as.isEmpty) empty 
     else cons(as.head, apply(as.tail: _*))
 
-  val ones: Stream[Int] = cons(1, ones)
+  val ones: Stream[Int] = cons(1, constant(1))
 
-  def from(n: Int): Stream[Int] = sys.error("todo")
+  def constant[B](b: B): Stream[B] = cons(b, constant(b))
+
+  def from(n: Int): Stream[Int] = cons(n, from(n + 1))
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
 }
