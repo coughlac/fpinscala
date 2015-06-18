@@ -272,4 +272,29 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       result.toList must beEqualTo(List(5, 7, 9))
     }
   }
+
+  "zipAll using unfold" should {
+    "interleave corresponding elements of the streams together" in {
+      val stream1 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
+      val stream2 = () ⇒ Empty
+
+      stream1.zipAll(stream2()).toList must beEqualTo(List((Some(1), None), (Some(2), None), (Some(3), None)))
+      stream2().zipAll(stream1).toList must beEqualTo(List((None, Some(1)), (None, Some(2)), (None, Some(3))))
+    }
+
+    "interleave corresponding elements of the streams together" in {
+      val stream1 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
+      val stream2 = Cons(() ⇒ 4, () ⇒ Cons(() ⇒ 5, () ⇒ Cons(() ⇒ 6, () ⇒ Empty)))
+
+      stream1.zipAll(stream2).toList must beEqualTo(List((Some(1), Some(4)), (Some(2), Some(5)), (Some(3), Some(6))))
+    }
+
+    "interleave corresponding elements of the streams together even if not the same length" in {
+      val stream1 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
+      val stream2 = Cons(() ⇒ 5, () ⇒ Cons(() ⇒ 6, () ⇒ Empty))
+
+      stream1.zipAll(stream2).toList must beEqualTo(List((Some(1), Some(5)), (Some(2), Some(6)), (Some(3), None)))
+      stream2.zipAll(stream1).toList must beEqualTo(List((Some(5), Some(1)), (Some(6), Some(2)), (None, Some(3))))
+    }
+  }
 }

@@ -70,6 +70,15 @@ trait Stream[+A] {
     }
   }
 
+  def zipAll[B](s2: Stream[B]): Stream[(Option[A], Option[B])] = {
+    unfold(this, s2) {
+      case (Cons(h1, t1), Cons(h2, t2)) ⇒ Some((Some(h1()), Some(h2())), (t1(), t2()))
+      case (Cons(h1, t1), Empty) ⇒ Some((Some(h1()), None), (t1(), empty))
+      case (Empty, Cons(h2, t2)) ⇒ Some((None, Some(h2())), (empty, t2()))
+      case _ ⇒ None
+    }
+  }
+
   def filter(p: A ⇒ Boolean): Stream[A] = foldRight(empty[A])((h, acc) ⇒ (h, acc) match {
     case (head, s) if p(head) ⇒ cons(head, s)
     case _                    ⇒ acc
