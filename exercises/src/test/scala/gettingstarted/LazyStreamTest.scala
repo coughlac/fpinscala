@@ -302,33 +302,33 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
     "be true if the stream starts with all the same elements in the same order" in {
       val stream1 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
       val stream2 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
-      stream1.startsWith(stream2) should beTrue
+      stream1 startsWith stream2 should beTrue
     }
 
     "be false if the comparison stream is empty" in {
       val stream1 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
       val stream2 = () ⇒ Empty
-      stream1.startsWith(stream2()) should beFalse
+      stream1 startsWith stream2() should beFalse
     }
 
     "be false if the elements at the start of the stream do not match (even if a subset)" in {
       val stream1 = Cons(() ⇒ 5, () ⇒ Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty))))
       val stream2 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
-      stream1.startsWith(stream2) should beFalse
+      stream1 startsWith stream2 should beFalse
     }
 
     "be false if the order is not the same" in {
       val stream1 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
       val stream2 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 2, () ⇒ Empty)))
       val stream3 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 4, () ⇒ Empty)))
-      stream1.startsWith(stream2) should beFalse
-      stream1.startsWith(stream3) should beFalse
+      stream1 startsWith stream2 should beFalse
+      stream1 startsWith stream3 should beFalse
     }
 
     "be false if all the elements of the comparison stream are not there" in {
       val stream1 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
       val stream2 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 5, () ⇒ Empty)))
-      stream1.startsWith(stream2) should beFalse
+      stream1 startsWith stream2 should beFalse
     }
   }
 }
