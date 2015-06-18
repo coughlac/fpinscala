@@ -201,7 +201,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       val originalStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
       val additionalStream = Cons(() ⇒ 10, () ⇒ Cons(() ⇒ 20, () ⇒ Cons(() ⇒ 30, () ⇒ Cons(() ⇒ 40, () ⇒ Empty))))
       val expectedStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4,
-        () ⇒ Cons(() ⇒ 10, () ⇒ Cons(() ⇒ 20, () ⇒ Cons(() ⇒ 30, () ⇒ Cons(() ⇒ 40, () ⇒ Empty ))))))))
+        () ⇒ Cons(() ⇒ 10, () ⇒ Cons(() ⇒ 20, () ⇒ Cons(() ⇒ 30, () ⇒ Cons(() ⇒ 40, () ⇒ Empty))))))))
 
       originalStream.append(additionalStream).toList must beEqualTo(expectedStream.toList)
     }
@@ -232,7 +232,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
 
   "fibs" should {
     "return an infinite stream of fibonacci numbers 0, 1, 1, 2, 3, 5, 8 etc" in {
-      val expectedStream =  Cons(() ⇒ 0, () ⇒ Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 5, () ⇒ Cons(() ⇒ 8, () ⇒ Empty)))))))
+      val expectedStream = Cons(() ⇒ 0, () ⇒ Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 5, () ⇒ Cons(() ⇒ 8, () ⇒ Empty)))))))
 
       Stream.fibs(0).take(7).toList must beEqualTo(expectedStream.toList)
     }
@@ -242,7 +242,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
     "take an initial state an a function for producing both the next state and the next value in the generated stream. " +
       "Option is used to indicate when the Stream should be terminated, if at all." in {
       val expectedStream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
-      Stream.unfold(0)({ case 4 ⇒ None case x ⇒ Some(x+1, x+1) }).toList must beEqualTo(expectedStream.toList)
+      Stream.unfold(0)({ case 4 ⇒ None case x ⇒ Some(x + 1, x + 1) }).toList must beEqualTo(expectedStream.toList)
     }
 
     "as an implementation of the ones function" in {
@@ -254,7 +254,7 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
     }
 
     "as an implementation of the from function" in {
-      Stream.fromAlt(1).take(4).toList  must beEqualTo(Stream.from(1).take(4).toList)
+      Stream.fromAlt(1).take(4).toList must beEqualTo(Stream.from(1).take(4).toList)
     }
 
     "as an implementation of the fibonacci function" in {
@@ -264,8 +264,8 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
 
   "zipWith using unfold" should {
     "add corresponding elements of the streams together and return the output stream" in {
-      val stream1 =  Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
-      val stream2 =  Cons(() ⇒ 4, () ⇒ Cons(() ⇒ 5, () ⇒ Cons(() ⇒ 6, () ⇒ Empty)))
+      val stream1 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
+      val stream2 = Cons(() ⇒ 4, () ⇒ Cons(() ⇒ 5, () ⇒ Cons(() ⇒ 6, () ⇒ Empty)))
 
       val result = Stream.zipWith(stream1, stream2)((x, y) => x + y)
 
@@ -295,6 +295,40 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
 
       stream1.zipAll(stream2).toList must beEqualTo(List((Some(1), Some(5)), (Some(2), Some(6)), (Some(3), None)))
       stream2.zipAll(stream1).toList must beEqualTo(List((Some(5), Some(1)), (Some(6), Some(2)), (None, Some(3))))
+    }
+  }
+
+  "startsWith" should {
+    "be true if the stream starts with all the same elements in the same order" in {
+      val stream1 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
+      val stream2 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
+      stream1.startsWith(stream2) should beTrue
+    }
+
+    "be false if the comparison stream is empty" in {
+      val stream1 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
+      val stream2 = () ⇒ Empty
+      stream1.startsWith(stream2()) should beFalse
+    }
+
+    "be false if the elements at the start of the stream do not match (even if a subset)" in {
+      val stream1 = Cons(() ⇒ 5, () ⇒ Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty))))
+      val stream2 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
+      stream1.startsWith(stream2) should beFalse
+    }
+
+    "be false if the order is not the same" in {
+      val stream1 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      val stream2 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 2, () ⇒ Empty)))
+      val stream3 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 4, () ⇒ Empty)))
+      stream1.startsWith(stream2) should beFalse
+      stream1.startsWith(stream3) should beFalse
+    }
+
+    "be false if all the elements of the comparison stream are not there" in {
+      val stream1 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Cons(() ⇒ 4, () ⇒ Empty))))
+      val stream2 = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 5, () ⇒ Empty)))
+      stream1.startsWith(stream2) should beFalse
     }
   }
 }

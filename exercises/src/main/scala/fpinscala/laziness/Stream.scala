@@ -54,7 +54,12 @@ trait Stream[+A] {
   //  the first element of this traversable collection if it is nonempty, None if it is empty.
   def headOption: Option[A] = foldRight(None: Option[A])((h, acc) ⇒ Some(h))
 
-  def startsWith[B](s: Stream[B]): Boolean = sys.error("todo")
+  def startsWith[B](s: Stream[B]): Boolean = {
+    ! zipAll(s).exists {
+      case (Some(x), Some(y)) ⇒ x != y
+      case _                  ⇒ true
+    }
+  }
 
   def toList: List[A] = this match {
     case Cons(h, t) ⇒ h() :: t().toList
