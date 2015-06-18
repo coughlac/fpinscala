@@ -20,9 +20,15 @@ trait Stream[+A] {
   }
 
   def take(n: Int): Stream[A] = this match {
-    case Empty ⇒ Empty
-    case _ if n == 0 ⇒ Empty
-    case Cons(h, t) ⇒ Cons(h, () ⇒ t().take(n - 1))
+    case Cons(h, t) if n != 0 ⇒ Cons(h, () ⇒ t().take(n - 1))
+    case _ ⇒ Empty
+  }
+
+  def takeAlt(n: Int): Stream[A] = {
+    Stream.unfold(this) {
+      case Cons(h, t) if n != 0 ⇒ Some(h(), t().takeAlt(n - 1))
+      case _ ⇒ None
+    }
   }
 
   def drop(n: Int): Stream[A] = this match {
