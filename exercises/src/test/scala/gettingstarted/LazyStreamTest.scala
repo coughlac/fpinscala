@@ -261,4 +261,15 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
       Stream.fibsAlt(0).take(7).toList must beEqualTo(Stream.fibs(0).take(7).toList)
     }
   }
+
+  "zipWith using unfold" should {
+    "add corresponding elements of the streams together and return the output stream" in {
+      val stream1 =  Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
+      val stream2 =  Cons(() ⇒ 4, () ⇒ Cons(() ⇒ 5, () ⇒ Cons(() ⇒ 6, () ⇒ Empty)))
+
+      val result = Stream.zipWith(stream1, stream2)((x, y) => x + y)
+
+      result.toList must beEqualTo(List(5, 7, 9))
+    }
+  }
 }
