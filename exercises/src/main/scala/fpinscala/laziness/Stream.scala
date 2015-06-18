@@ -100,18 +100,8 @@ object Stream {
     generateNextFibonacciNumber(n, n+1)
   }
 
-  def fibsAlt(n: Int): Stream[Int] = {
-    type States = (Int, Int)
-    val seed: States = (n, n + 1)
-
-    Stream.unfold[Int, States](seed)(
-      (states: States) ⇒ {
-        val prev = states._1
-        val current = states._2
-        val next = prev + current
-        Some((prev, (current, next)))
-      }
-    )
+  def fibsAlt(n: Int): Stream[Int] = Stream.unfold( (n, n + 1) ) {
+    case (prev, current) ⇒ Some((prev, (current, prev + current)))
   }
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = {
