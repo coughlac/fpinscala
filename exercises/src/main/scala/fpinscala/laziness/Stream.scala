@@ -40,6 +40,11 @@ trait Stream[+A] {
   def takeWhile(p: A => Boolean): Stream[A] =
     foldRight(empty: Stream[A])((h, acc) => if (p(h)) cons(h, acc) else empty)
 
+  def takeWhileAlt(p: A => Boolean): Stream[A] = Stream.unfold(this){
+    case Cons(h, t) if p(h()) ⇒ Some(h(), t().takeWhileAlt(p))
+    case _ ⇒ None
+  }
+
   def forAll(p: A => Boolean): Boolean = foldRight(true)((h, acc) => p(h) && acc)
 
   //  Optionally selects the first element.

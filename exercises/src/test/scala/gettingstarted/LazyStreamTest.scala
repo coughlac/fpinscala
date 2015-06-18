@@ -105,6 +105,25 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
     }
   }
 
+  "takeWhileAlt using unfold" should {
+    "not change the original stream if it is empty" in {
+      Empty.takeWhileAlt(_.equals("A")) must beEqualTo(Empty)
+    }
+
+    "return an Empty Stream if predicate was never met" in {
+      val actualStream = Cons(() ⇒ "A", () ⇒ Cons(() ⇒ "B", () ⇒ Cons(() ⇒ "C", () ⇒ Empty)))
+
+      actualStream.takeWhileAlt(_.equals(1)) must beEqualTo(Empty)
+    }
+
+    "returns elements of a Stream just until the predicate fails" in {
+      val actualStream = Cons(() ⇒ "A", () ⇒ Cons(() ⇒ "B", () ⇒ Cons(() ⇒ "C", () ⇒ Cons(() ⇒ "D", () ⇒ Empty))))
+      val expectedStream = Cons(() ⇒ "A", () ⇒ Cons(() ⇒ "B", () ⇒ Empty))
+
+      actualStream.takeWhileAlt(!_.equals("C")).toList must beEqualTo(expectedStream.toList)
+    }
+  }
+
   "forAll" should {
     "returns true if the stream is empty" in {
       Empty.forAll(_.equals("C")) must beTrue
