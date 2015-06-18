@@ -51,6 +51,12 @@ trait Stream[+A] {
 
   def map[B](f: A => B): Stream[B] = foldRight(empty[B])((h, acc) => cons[B](f(h), acc))
 
+  def mapAlt[B](f: A => B): Stream[B] = {
+    unfold(this) {
+      case Cons(head, tail) ⇒ Some(f(head()), tail())
+      case _ ⇒ None
+    }
+  }
   def filter(p: A => Boolean): Stream[A] = foldRight(empty[A])((h, acc) => (h, acc) match{
     case (head, s) if p(head) => cons(head, s)
     case _ => acc
@@ -111,7 +117,7 @@ object Stream {
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = {
     def loop(result: Option[(A, S)]): Stream[A] = result match {
       case None ⇒ empty
-      case Some(tuple) ⇒ cons(tuple._1, loop(f(tuple._2)))
+      case Some((a,s)) ⇒ cons(a, loop(f(s)))
     }
     loop(f(z))
   }
