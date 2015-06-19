@@ -31,13 +31,16 @@ object RNG {
       (f(a), rng2)
     }
 
+  def doubleAlt(rng: RNG): (Double, RNG) = {
+    map(nonNegativeInt)(i ⇒ {val x = convertAndRound(i); x match { case 1 ⇒ convertAndRound(0); case _ ⇒ x}}).apply(rng)
+  }
+
   def nonNegativeInt(rng: RNG): (Int, RNG) = rng.nextInt match {
     case (n, state) if n == Int.MinValue ⇒ (Int.MaxValue, state)
     case (n, state)                      ⇒ (n.abs, state)
   }
 
   def double(rng: RNG): (Double, RNG) = {
-    def convertAndRound(n: Int): Double = BigDecimal.apply(n.toDouble / Int.MaxValue.toDouble).setScale(2, RoundingMode.UP).toDouble
     nonNegativeInt(rng) match {
       case (n, state) if n == Int.MaxValue ⇒ (convertAndRound(0), state)
       case (n, state)                      ⇒ (convertAndRound(n), state)
@@ -80,6 +83,8 @@ object RNG {
   def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = ???
 
   def flatMap[A,B](f: Rand[A])(g: A => Rand[B]): Rand[B] = ???
+
+  private def convertAndRound(n: Int): Double = BigDecimal.apply(n.toDouble / Int.MaxValue.toDouble).setScale(2, RoundingMode.UP).toDouble
 }
 
 case class State[S,+A](run: S => (A, S)) {
