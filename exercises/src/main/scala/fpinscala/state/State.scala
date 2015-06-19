@@ -1,5 +1,6 @@
 package fpinscala.state
 
+import scala.math.BigDecimal.RoundingMode
 
 trait RNG {
   def nextInt: (Int, RNG) // Should generate a random `Int`. We'll later define other functions in terms of `nextInt`.
@@ -32,10 +33,16 @@ object RNG {
 
   def nonNegativeInt(rng: RNG): (Int, RNG) = rng.nextInt match {
     case (n, state) if n == Int.MinValue ⇒ (Int.MaxValue, state)
-    case (n, state) ⇒ (n.abs, state)
+    case (n, state)                      ⇒ (n.abs, state)
   }
 
-  def double(rng: RNG): (Double, RNG) = ???
+  def double(rng: RNG): (Double, RNG) = {
+    def convertAndRound(n: Int): Double = BigDecimal.apply(n.toDouble / Int.MaxValue.toDouble).setScale(2, RoundingMode.UP).toDouble
+    nonNegativeInt(rng) match {
+      case (n, state) if n == Int.MaxValue ⇒ (convertAndRound(0), state)
+      case (n, state) ⇒ (convertAndRound(n), state)
+    }
+  }
 
   def intDouble(rng: RNG): ((Int,Double), RNG) = ???
 
