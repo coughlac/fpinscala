@@ -67,7 +67,7 @@ class StateTest extends org.specs2.mutable.Specification {
         override def nextInt: (Int, RNG) = (-42, this)
       }
       val ((i, d), _) = RNG.intDouble(testRNG)
-      i should beEqualTo(42)
+      i should beEqualTo(-42)
       d should beEqualTo(0.01)
     }
     "should always return a positive int for Int.maxValue" in {
@@ -91,8 +91,18 @@ class StateTest extends org.specs2.mutable.Specification {
         override def nextInt: (Int, RNG) = (Int.MinValue, this)
       }
       val ((i, d), _) = RNG.intDouble(testRNG)
-      i should beEqualTo(Int.MaxValue)
+      i should beEqualTo(Int.MinValue)
       d should beEqualTo(0.0D)
+    }
+  }
+
+  "ints" should {
+    "generate a list of random ints" in {
+      val testRNG: RNG = new RNG() {
+        override def nextInt: (Int, RNG) = (Int.MinValue, this)
+      }
+      val (listOfRandomInts, _) = RNG.ints(5)(testRNG)
+      listOfRandomInts should beEqualTo( Int.MinValue :: Int.MinValue :: Int.MinValue :: Int.MinValue :: Int.MinValue :: Nil)
     }
   }
 }

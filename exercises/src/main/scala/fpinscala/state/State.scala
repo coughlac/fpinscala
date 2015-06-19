@@ -62,7 +62,18 @@ object RNG {
     ((double1Value, double2Value, double3Value), double3RNG)
   }
 
-  def ints(count: Int)(rng: RNG): (List[Int], RNG) = ???
+  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+    def loop(acc :List[Int], count: Int, rng: RNG): (List[Int], RNG) = {
+      count match {
+        case 0 ⇒ (acc, rng)
+        case _ ⇒ {
+          val (value, nextRng) = rng.nextInt
+          loop(value::acc, count-1, nextRng)
+        }
+      }
+    }
+    loop(Nil, count, rng)
+  }
 
   def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = ???
 
