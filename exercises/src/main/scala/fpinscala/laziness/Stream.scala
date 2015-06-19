@@ -77,8 +77,26 @@ trait Stream[+A] {
 
   def tails: Stream[Stream[A]] = {
     unfold(this) {
-      case Cons(head, tail) ⇒ Some(Cons(head, tail), tail())
-      case _                ⇒ None
+      case stream@Cons(head, tail) ⇒ Some(stream, tail())
+      case _ ⇒ None
+    }
+  }
+
+  def hasSubsequence[B](s: Stream[B]): Boolean =
+    this.tails exists (_ startsWith s)
+
+  def scanRight[B](z: B)(f: A ⇒ B):Stream[B] = {
+    val t = this.tails
+    val s = t.map(_.toList).toList
+    println(s"Tails $s")
+    val function: (A, ⇒B) ⇒ B = (a, b) ⇒ f(a)
+    t.map{ x ⇒
+      println("x " +x.toList)
+      println(z)
+
+      val right: B = x.foldRight(z)(function)
+      println("right "+right)
+      right
     }
   }
 

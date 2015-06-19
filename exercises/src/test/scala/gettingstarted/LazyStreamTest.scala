@@ -335,11 +335,22 @@ class LazyStreamTest extends org.specs2.mutable.Specification {
   "tails" should {
     "return the Stream of suffixes of the input sequence, starting with the original Stream." in {
       val stream = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
+
       val suffix1: Stream[Int] = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
       val suffix2: Stream[Int] = Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty))
       val suffix3: Stream[Int] = Cons(() ⇒ 3, () ⇒ Empty)
       val expectedResult: Stream[Stream[Int]] = Cons(() ⇒ suffix1, () ⇒ Cons(() ⇒ suffix2, () ⇒ Cons(() ⇒ suffix3, () ⇒ Empty)))
+
       stream.tails.map(_.toList).toList should beEqualTo(expectedResult.map(_.toList).toList)
+    }
+  }
+
+  "scanRight" should {
+    "like a foldRight that returns a Stream of the intermediate results." in {
+      val stream: Stream[Int] = Cons(() ⇒ 1, () ⇒ Cons(() ⇒ 2, () ⇒ Cons(() ⇒ 3, () ⇒ Empty)))
+
+      val results: Stream[Int] = stream.scanRight[Int](0)(x ⇒ x + x)
+      results.toList should beEqualTo(6 :: 5 :: 3 :: 0 :: Nil)
     }
   }
 }
