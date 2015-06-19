@@ -40,15 +40,27 @@ object RNG {
     def convertAndRound(n: Int): Double = BigDecimal.apply(n.toDouble / Int.MaxValue.toDouble).setScale(2, RoundingMode.UP).toDouble
     nonNegativeInt(rng) match {
       case (n, state) if n == Int.MaxValue ⇒ (convertAndRound(0), state)
-      case (n, state) ⇒ (convertAndRound(n), state)
+      case (n, state)                      ⇒ (convertAndRound(n), state)
     }
   }
 
-  def intDouble(rng: RNG): ((Int,Double), RNG) = ???
+  def intDouble(rng: RNG): ((Int,Double), RNG) = {
+    val (intValue, intRNG) = rng.nextInt
+    val (doubleValue, doubleRNG) = double(intRNG)
+    ((intValue, doubleValue), doubleRNG)
+  }
 
-  def doubleInt(rng: RNG): ((Double,Int), RNG) = ???
+  def doubleInt(rng: RNG): ((Double,Int), RNG) = {
+    val (result, resRNG) = intDouble(rng)
+    (result.swap, resRNG)
+  }
 
-  def double3(rng: RNG): ((Double,Double,Double), RNG) = ???
+  def double3(rng: RNG): ((Double,Double,Double), RNG) = {
+    val (double1Value, double1RNG) = double(rng)
+    val (double2Value, double2RNG) = double(double1RNG)
+    val (double3Value, double3RNG) = double(double2RNG)
+    ((double1Value, double2Value, double3Value), double3RNG)
+  }
 
   def ints(count: Int)(rng: RNG): (List[Int], RNG) = ???
 
