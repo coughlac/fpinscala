@@ -1,5 +1,6 @@
 package fpinscala.state
 
+import scala.annotation.tailrec
 import scala.math.BigDecimal.RoundingMode
 
 trait RNG {
@@ -66,6 +67,7 @@ object RNG {
   }
 
   def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+    @tailrec
     def loop(acc :List[Int], count: Int, rng: RNG): (List[Int], RNG) = {
       count match {
         case 0 ⇒ (acc, rng)
