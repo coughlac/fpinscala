@@ -83,6 +83,8 @@ object RNG {
     loop(Nil, count, rng)
   }
 
+  def intsSeq(count: Int): Rand[List[Int]] = sequence(List.fill(count)(int))
+
   def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
     rng => {
       val (a, rng2) = ra(rng)
@@ -93,7 +95,15 @@ object RNG {
 
   def both[A,B](ra: Rand[A], rb: Rand[B]): Rand[(A, B)] = map2(ra, rb)((_, _))
 
-  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = ???
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = {
+    rng => {
+      val values = fs.map((elem: Rand[A]) => {
+        val (value, _) = elem(rng)
+        value
+      })
+      (values, rng)
+    }
+  }
 
   def flatMap[A,B](f: Rand[A])(g: A => Rand[B]): Rand[B] = ???
 

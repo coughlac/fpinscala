@@ -74,6 +74,16 @@ class StateTest extends org.specs2.mutable.Specification {
     }
   }
 
+  "intsSeq" should {
+    "generate a list of random ints" in {
+      val fixture = SpyRng(Int.MinValue)
+      val a: Rand[List[Int]] = RNG.intsSeq(5)
+      val listOfRandomInts = a(fixture)._1
+      listOfRandomInts should beEqualTo( Int.MinValue :: Int.MinValue :: Int.MinValue :: Int.MinValue :: Int.MinValue :: Nil)
+      fixture.getCallCount should beEqualTo(5)
+    }
+  }
+
   "doubleAlt" should {
     "return 0 " in {
       val (value, _) = RNG.doubleAlt(SpyRng(Int.MinValue))
