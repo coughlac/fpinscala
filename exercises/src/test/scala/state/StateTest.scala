@@ -1,6 +1,7 @@
 package state
 
 import fpinscala.state.RNG
+import fpinscala.state.RNG.Rand
 
 class StateTest extends org.specs2.mutable.Specification {
 
@@ -87,6 +88,15 @@ class StateTest extends org.specs2.mutable.Specification {
     "return numbers between 0 and 1" in {
       val (value, _) = RNG.doubleAlt(SpyRng(Int.MaxValue / 2))
       value should beEqualTo(0.5D)
+    }
+  }
+
+  "map2" should {
+    "return a tuple with f applied to value a from ra and b from rb as the value and the resultant RNG " in {
+      val ra: (RNG) => (Int, RNG) = aRand => aRand.nextInt
+      val rb: (RNG) => (Int, RNG) = bRand => bRand.nextInt
+      val a: Rand[Int] = RNG.map2( ra , rb)((a, b) => a + b)
+      a(SpyRng(20))._1 should beEqualTo(40)
     }
   }
 

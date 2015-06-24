@@ -48,6 +48,10 @@ object RNG {
     }
   }
 
+  def randIntDouble: Rand[(Int, Double)] = both(int, double)
+
+  def randDoubleInt: Rand[(Double, Int)] = both(double, int)
+
   def intDouble(rng: RNG): ((Int,Double), RNG) = {
     val (intValue, intRNG) = rng.nextInt
     val (doubleValue, doubleRNG) = double(intRNG)
@@ -71,16 +75,23 @@ object RNG {
     def loop(acc :List[Int], count: Int, rng: RNG): (List[Int], RNG) = {
       count match {
         case 0 ⇒ (acc, rng)
-        case _ ⇒ {
+        case _ ⇒
           val (value, nextRng) = rng.nextInt
           loop(value::acc, count-1, nextRng)
-        }
       }
     }
     loop(Nil, count, rng)
   }
 
-  def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = ???
+  def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = {
+    rng => {
+      val (a, rng2) = ra(rng)
+      val (b, rng3) = rb(rng2)
+      (f(a, b), rng3)
+    }
+  }
+
+  def both[A,B](ra: Rand[A], rb: Rand[B]): Rand[(A, B)] = map2(ra, rb)((_, _))
 
   def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = ???
 
